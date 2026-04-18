@@ -14,5 +14,13 @@ node_modules/
 .idea/
 .vscode/
 
-# logs
-*.log
+# large / backups / archives
+*.zip
+*.pdf
+*.sql
+*.png
+*.mp3
+api/files/
+api/store1/arquivos/
+ui-frontent/loja.zip
+ui-frontent/loja/frontsrc.zip
