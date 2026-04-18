@@ -1,0 +1,294 @@
+<!-- app.html -->
+<div class="page-wrapper">
+
+  <!-- BUYER SIDEBAR -->
+  <!-- BUYER SIDEBAR (DESKTOP ONLY) -->
+  <aside class="menu-sidebar d-none d-lg-block" *ngIf="!isAdminRoute">
+    <div class="logo">
+      <a [routerLink]="'/products'">
+        <img src="assets/images/marcelLogo3.png" alt="marcel" class="img-fluid">
+      </a>
+    </div>
+
+    <app-product-category-menu></app-product-category-menu>
+
+    <!-- Logged user links -->
+    <div class="user-menu-links" *ngIf="authService.isLoggedIn()">
+
+      <div class="user-email-badge">
+        <span class="material-icons">account_circle</span>
+        <span class="email-text">{{ authService.getUserEmail() }}</span>
+      </div>
+
+      <!-- Simple notification badge in sidebar -->
+      <div class="notification-badge-wrapper">
+        <span class="material-icons">notifications</span>
+        <span *ngIf="notificationCount > 0" class="notification-count-badge">
+          {{ notificationCount }}
+        </span>
+      </div>
+
+      <a routerLink="/profile" class="user-link">
+        <span class="material-icons">person</span>
+        My Profile
+      </a>
+
+      <a routerLink="/orders" class="user-link">
+        <span class="material-icons">receipt</span>
+        My Orders
+      </a>
+
+      <a routerLink="/favorites" class="user-link">
+        <span class="material-icons">favorite</span>
+        <span>My Favorites</span>
+
+        <span *ngIf="favoriteCount > 0" class="favorite-count-badge">
+          {{ favoriteCount }}
+        </span>
+      </a>
+
+      <a routerLink="/notifications" class="user-link">
+        <span class="material-icons">notifications</span>
+        <span>Notifications</span>
+
+        <span *ngIf="notificationCount > 0" class="notification-count-badge">
+          {{ notificationCount }}
+        </span>
+      </a>
+    </div>
+
+    <!-- Guest links -->
+    <div class="user-menu-links" *ngIf="!authService.isLoggedIn()">
+      <a routerLink="/login" class="user-link">
+        <span class="material-icons">login</span>
+        Login
+      </a>
+
+      <a routerLink="/register" class="user-link">
+        <span class="material-icons">person_add</span>
+        Register
+      </a>
+    </div>
+  </aside>
+
+  <!-- BUYER CATEGORIES (MOBILE ONLY - COLLAPSIBLE) -->
+  <div class="mobile-categories d-block d-lg-none" *ngIf="!isAdminRoute">
+
+    <button class="mobile-categories-toggle" (click)="toggleCategories()">
+      <span class="material-icons">menu</span>
+      Categories
+    </button>
+
+    <div *ngIf="showMobileCategories" class="mobile-categories-dropdown">
+      <app-product-category-menu></app-product-category-menu>
+    </div>
+
+  </div>
+
+  <!-- ADMIN SIDEBAR -->
+  <aside class="admin-sidebar d-none d-lg-block" *ngIf="isAdminRoute">
+    <div class="admin-logo">
+      <a routerLink="/admin/dashboard">Admin Panel</a>
+    </div>
+
+    <nav class="admin-sidebar-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="material-icons">dashboard</span>
+        Dashboard
+      </a>
+
+      <a routerLink="/admin/orders" routerLinkActive="active-link">
+        <span class="material-icons">shopping_cart</span>
+        Orders
+      </a>
+
+      <a routerLink="/admin/products" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="material-icons">inventory_2</span>
+        Products
+      </a>
+
+      <a routerLink="/admin/activity" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="material-icons">history</span>
+        Activity
+      </a>
+
+      <a routerLink="/admin/customers" routerLinkActive="active-link">
+        <span class="material-icons">groups</span>
+        Customers
+      </a>
+
+      <a routerLink="/products">
+        <span class="material-icons">store</span>
+        Store
+      </a>
+
+      <button class="logout-btn sidebar-logout-btn" (click)="logout()">
+        <span class="material-icons">logout</span>
+        Logout
+      </button>
+    </nav>
+  </aside>
+
+  <div class="page-container" [class.admin-page-container]="isAdminRoute">
+
+    <!-- BUYER HEADER -->
+    <header class="header-desktop" *ngIf="!isAdminRoute">
+      <div class="section-content section-content-p30">
+        <div class="container-fluid">
+          <div class="header-wrap">
+
+            <app-search></app-search>
+
+            <div class="header-actions">
+
+              <!-- CART -->
+              <app-cart-status></app-cart-status>
+
+              <!-- NOTIFICATION DROPDOWN -->
+              <div class="notification-menu-dropdown" *ngIf="authService.isLoggedIn()">
+
+                <button class="user-menu-button" [matMenuTriggerFor]="notificationMenu">
+                  <span class="material-icons">notifications</span>
+
+                  <span *ngIf="notificationCount > 0" class="notification-count-badge">
+                    {{ notificationCount }}
+                  </span>
+                </button>
+
+                <mat-menu #notificationMenu="matMenu" class="notification-menu">
+
+                  <div class="notification-menu-header">
+                    <span>Notifications</span>
+
+                    <button type="button" class="mark-all-btn" *ngIf="notificationCount > 0"
+                      (click)="markAllNotificationsAsRead()">
+                      Mark all as read
+                    </button>
+                  </div>
+
+                  <mat-divider></mat-divider>
+
+                  <div *ngIf="notifications.length === 0" class="notification-empty">
+                    No notifications
+                  </div>
+
+                  <button mat-menu-item *ngFor="let notification of notifications"
+                    (click)="handleNotificationClick(notification)" class="notification-item"
+                    [class.notification-read]="notification.read">
+
+                    <div class="notification-item-content">
+                      <div class="notification-title-row">
+                        <span class="notification-title">
+                          {{ notification.title }}
+                        </span>
+
+                        <span *ngIf="!notification.read" class="notification-dot"></span>
+                      </div>
+
+                      <div class="notification-message">
+                        {{ notification.message }}
+                      </div>
+                    </div>
+                  </button>
+
+                  <mat-divider></mat-divider>
+
+                  <button mat-menu-item routerLink="/notifications">
+                    <mat-icon>notifications</mat-icon>
+                    <span>View all notifications</span>
+                  </button>
+
+                </mat-menu>
+              </div>
+
+              <!-- USER MENU -->
+              <div class="user-menu-dropdown" *ngIf="authService.isLoggedIn()">
+                <button class="user-menu-button" [matMenuTriggerFor]="userMenu">
+                  <span class="material-icons">account_circle</span>
+                  <span class="user-email d-none d-md-inline">
+                    &nbsp;{{ authService.getUserEmail() }}&nbsp;
+                  </span>
+                </button>
+
+                <mat-menu #userMenu="matMenu">
+
+                  <div class="user-menu-header px-3 py-2">
+                    <div class="small text-muted">Signed in as</div>
+                    <div class="fw-bold">{{ authService.getUserEmail() }}</div>
+                  </div>
+
+                  <mat-divider></mat-divider>
+
+                  <button mat-menu-item routerLink="/profile">
+                    <mat-icon>person</mat-icon>
+                    My Profile
+                  </button>
+
+                  <button mat-menu-item routerLink="/orders">
+                    <mat-icon>receipt</mat-icon>
+                    My Orders
+                  </button>
+
+                  <button mat-menu-item routerLink="/favorites">
+                    <mat-icon>favorite</mat-icon>
+                    <span>My Favorites</span>
+
+                    <span *ngIf="favoriteCount > 0" class="favorite-count-badge" style="margin-left:auto;">
+                      {{ favoriteCount }}
+                    </span>
+                  </button>
+
+                  <button mat-menu-item routerLink="/notifications">
+                    <mat-icon>notifications</mat-icon>
+                    <span>Notifications</span>
+
+                    <span *ngIf="notificationCount > 0" class="notification-count-badge" style="margin-left:auto;">
+                      {{ notificationCount }}
+                    </span>
+                  </button>
+
+                  <mat-divider></mat-divider>
+
+                  <button mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    Logout
+                  </button>
+                </mat-menu>
+              </div>
+
+              <!-- GUEST MENU -->
+              <div class="user-menu-dropdown" *ngIf="!authService.isLoggedIn()">
+                <button class="user-menu-button" [matMenuTriggerFor]="guestMenu">
+                  <span class="material-icons">account_circle</span>
+                </button>
+
+                <mat-menu #guestMenu="matMenu">
+                  <button mat-menu-item routerLink="/login">
+                    <mat-icon>login</mat-icon>
+                    Login
+                  </button>
+
+                  <button mat-menu-item routerLink="/register">
+                    <mat-icon>person_add</mat-icon>
+                    Register
+                  </button>
+                </mat-menu>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<footer *ngIf="!isAdminRoute">
+  <ul>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Contact Us</a></li>
+    <li><a href="#">Help</a></li>
+  </ul>
+</footer>

@@ -1,0 +1,33 @@
+/* CSS do bloco de checkout para convidado*/
+.checkout-guest-box {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  margin-top: 20px;
+}
+
+.checkout-guest-icon {
+  font-size: 34px;
+  color: #1976d2;
+}
+
+.checkout-guest-content h4 {
+  margin: 0 0 6px;
+  color: #2d3748;
+}
+
+.checkout-guest-content p {
+  margin: 0 0 14px;
+  color: #718096;
+}
+
+.checkout-guest-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

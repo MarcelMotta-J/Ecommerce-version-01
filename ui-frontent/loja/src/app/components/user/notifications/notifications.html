@@ -1,0 +1,67 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+
+      <div class="notifications-page-header">
+        <div class="notifications-title-block">
+          <h2>Notifications</h2>
+          <p>Stay updated with your latest activity</p>
+        </div>
+
+        <div class="notifications-header-actions">
+          <span *ngIf="unreadCount > 0" class="notification-page-badge">
+            {{ unreadCount }} unread
+          </span>
+
+          <button
+            *ngIf="notifications.length > 0 && unreadCount > 0"
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="markAllAsRead()">
+            Mark all as read
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="notifications.length === 0" class="notifications-empty-state">
+        <span class="material-icons notifications-empty-icon">notifications_none</span>
+        <h3>No notifications yet</h3>
+        <p>When something important happens, it will appear here.</p>
+      </div>
+
+      <div *ngIf="notifications.length > 0" class="notifications-list">
+        <div
+          *ngFor="let notification of notifications"
+          class="notification-card"
+          [class.notification-card-read]="notification.read" >
+
+          <div class="notification-card-top">
+            <div class="notification-title-row">
+              <h4>{{ notification.title }}</h4>
+
+              <span *ngIf="!notification.read" class="notification-status-dot"></span>
+            </div>
+
+            <div class="notification-date">
+              {{ notification.createdAt | date:'short' }}
+            </div>
+          </div>
+
+          <div class="notification-message">
+            {{ notification.message }}
+          </div>
+
+          <div class="notification-card-actions" *ngIf="!notification.read">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              (click)="markAsRead(notification.id)">
+              Mark as read
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

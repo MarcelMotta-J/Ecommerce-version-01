@@ -1,0 +1,158 @@
+.favorites-header {
+  margin-bottom: 20px;
+}
+
+.favorites-header h2 {
+  margin-bottom: 5px;
+}
+
+.favorites-header p {
+  color: #666;
+}
+
+.product-box {
+  position: relative;
+}
+
+.favorite-button-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.favorite-btn {
+  border: none;
+  background: rgba(255,255,255,0.95);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.favorite-icon {
+  font-size: 22px;
+  color: #777;
+}
+
+.favorite-icon.favorite-active {
+  color: #e53935;
+}
+
+.favorite-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.favorite-actions .btn {
+  width: 100%;
+}
+
+.product-image img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.product-title {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.product-title a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.product-title a:hover {
+  color: #1976d2;
+}
+
+
+/* evita que cards com nomes diferentes fiquem desalinhados */
+.product-title {
+  min-height: 40px;
+}
+
+
+
+/* ===== Header ===== */
+.favorites-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.favorites-header h2 {
+  margin: 0;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.favorites-header p {
+  margin: 0;
+  color: #718096;
+}
+
+/* ===== Badge ===== */
+.favorite-count-badge {
+  background: #e91e63;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.empty-state-icon {
+  font-size: 70px;
+  color: #c0c4cc;
+  margin-bottom: 18px;
+}
+
+.empty-state h3 {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.empty-state p {
+  color: #718096;
+  margin-bottom: 20px;
+}
+
+/* ===== Button Hover ===== */
+.empty-state .btn {
+  transition: all 0.2s ease;
+}
+
+.empty-state .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Card spacing ===== */
+.col-md-3 {
+  display: flex;
+}
+
+.favorite-count-badge {
+  background: linear-gradient(135deg, #ff4081, #e91e63);
+}

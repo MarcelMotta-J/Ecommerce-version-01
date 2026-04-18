@@ -1,0 +1,75 @@
+<div class="admin-orders">
+  <div class="admin-panel">
+    <h2>Admin Orders</h2>
+
+    <div class="filters">
+      <input type="text" [(ngModel)]="customerEmail" placeholder="Search by customer email" />
+
+      <select [(ngModel)]="status">
+        <option [ngValue]="null">All statuses</option>
+        <option [ngValue]="'PENDING'">PENDING</option>
+        <option [ngValue]="'PAID'">PAID</option>
+        <option [ngValue]="'SHIPPED'">SHIPPED</option>
+        <option [ngValue]="'CANCELLED'">CANCELLED</option>
+      </select>
+
+      <button (click)="search()">Search</button>
+      <button (click)="clearFilters()">Clear</button>
+    </div>
+
+    <p *ngIf="loading">Loading orders...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <p *ngIf="!loading && totalElements > 0"  style="color: blue;">
+      Total orders: {{ totalElements }}
+    </p>
+
+    <table *ngIf="!loading && orders.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tracking Number</th>
+          <th>Customer Email</th>
+          <th>Status</th>
+          <th>Total Price</th>
+          <th>Total Quantity</th>
+          <th>Date Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.trackingNumber }}</td>
+          <td>{{ order.customerEmail }}</td>
+          <td>
+            <span [ngClass]="{
+                'pending-badge': order.status === 'PENDING',
+                'paid-badge': order.status === 'PAID',
+                'shipped-badge': order.status === 'SHIPPED',
+                'cancelled-badge': order.status === 'CANCELLED'
+              }">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>{{ order.totalPrice | currency }}</td>
+          <td>{{ order.totalQuantity }}</td>
+          <td>{{ order.dateCreated | date:'short' }}</td>
+          <td>
+            <button (click)="viewOrder(order.id)">
+              View
+            </button>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!loading && orders.length === 0">No orders found.</p>
+
+    <div class="pagination" *ngIf="totalPages > 0"  style="color: blue;">
+      <button (click)="previousPage()" [disabled]="page === 0">Previous</button>
+      <span>Page {{ page + 1 }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="page + 1 >= totalPages">Next</button>
+    </div>
+  </div>
+</div>

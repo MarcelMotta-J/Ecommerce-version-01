@@ -1,0 +1,97 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Cart as CartService } from '../../services/cart';
+
+@Component({
+  selector: 'app-checkout',
+  standalone: false,
+  templateUrl: './checkout.html',
+  styleUrl: './checkout.css',
+})
+export class Checkout implements OnInit {
+
+
+  checkoutFormGroup!: FormGroup;
+
+  totalPrice: number = 0.00;
+  totalQuantity: number = 0;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private cartService: CartService
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.checkoutFormGroup = this.formBuilder.group({
+      customer: this.formBuilder.group({
+        firstName: [''],
+        lastName: [''],
+        email: [''],
+      }),
+      shippingAddress: this.formBuilder.group({
+        street: [''],
+        city: [''],
+        state: [''],
+        counrty: [''],
+        zipCode: ['']
+      }),
+      billingAddress: this.formBuilder.group({
+        street: [''],
+        city: [''],
+        state: [''],
+        counrty: [''],
+        zipCode: ['']
+      }),
+      creditCard: this.formBuilder.group({
+        cardType: [''],
+        nameOnCard: [''],
+        cardNumber: [''],
+        securityCode: [''],
+        expirationMonth: [''],
+        expirationYear: ['']
+      })
+    });
+
+    
+  this.checkoutFormGroup = this.formBuilder.group({
+    // your form config...
+  });
+
+  // 🔥 ADD THIS PART
+  this.cartService.totalPrice.subscribe(
+    data => this.totalPrice = data
+  );
+
+  this.cartService.totalQuantity.subscribe(
+    data => this.totalQuantity = data
+  );
+
+  // optional but recommended:
+  this.cartService.computeCartTotals();
+  }
+
+  onSubmit() {
+    console.log(`handling the submition button`);
+    console.log(this.checkoutFormGroup.get('customer')?.value);
+    console.log("The email is " + this.checkoutFormGroup.get('customer')?.value.email);
+  }
+
+  copyShippingAddressToBillingAddress(event: any) {
+
+    
+    
+    if(event.target.checked){
+
+      this.checkoutFormGroup.controls['billingAddress']
+
+        .setValue(this.checkoutFormGroup.controls['shippingAddress'].value);
+
+    }else{
+      this.checkoutFormGroup.controls['billingAddress'].reset();
+    }
+    
+  }
+
+}

@@ -1,0 +1,164 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="logo">
+        <mat-icon class="logo-icon">store</mat-icon>
+        <h1>E-Store</h1>
+      </div>
+      <h2>Create Account</h2>
+      <p>Join us and start shopping</p>
+    </div>
+
+    <div *ngIf="generalError" class="alert alert-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ generalError }}</span>
+      <button class="alert-close" type="button" (click)="clearGeneralError()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email Address</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="your@email.com"
+          autocomplete="email">
+
+        <mat-icon matPrefix>email</mat-icon>
+
+        <mat-error *ngIf="email?.hasError('required') && email?.touched">
+          Email is required
+        </mat-error>
+
+        <mat-error *ngIf="email?.hasError('email') && email?.touched">
+          Please enter a valid email address
+        </mat-error>
+
+        <mat-error *ngIf="fieldErrors['email']">
+          {{ fieldErrors['email'] }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="new-password">
+
+        <mat-icon matPrefix>lock</mat-icon>
+
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+
+        <mat-error *ngIf="password?.hasError('required') && password?.touched">
+          Password is required
+        </mat-error>
+
+        <mat-error *ngIf="password?.hasError('minlength') && password?.touched">
+          Password must be at least 6 characters
+        </mat-error>
+
+        <mat-error *ngIf="fieldErrors['password']">
+          {{ fieldErrors['password'] }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="firstName"
+          autocomplete="given-name">
+
+        <mat-icon matPrefix>person</mat-icon>
+
+        <mat-error *ngIf="firstName?.hasError('required') && firstName?.touched">
+          First name is required
+        </mat-error>
+
+        <mat-error *ngIf="fieldErrors['firstName']">
+          {{ fieldErrors['firstName'] }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="lastName"
+          autocomplete="family-name">
+
+        <mat-icon matPrefix>badge</mat-icon>
+
+        <mat-error *ngIf="lastName?.hasError('required') && lastName?.touched">
+          Last name is required
+        </mat-error>
+
+        <mat-error *ngIf="fieldErrors['lastName']">
+          {{ fieldErrors['lastName'] }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="phoneNumber"
+          autocomplete="tel">
+
+        <mat-icon matPrefix>phone</mat-icon>
+
+        <mat-error *ngIf="fieldErrors['phoneNumber']">
+          {{ fieldErrors['phoneNumber'] }}
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="register-button"
+        [disabled]="registerForm.invalid || loading">
+
+        <mat-icon *ngIf="!loading">person_add</mat-icon>
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        <span *ngIf="!loading">Create Account</span>
+      </button>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <div class="login-section">
+        <p>Already have an account?</p>
+        <button
+          mat-stroked-button
+          color="primary"
+          type="button"
+          routerLink="/login">
+          Sign In
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

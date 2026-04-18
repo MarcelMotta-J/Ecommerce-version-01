@@ -1,0 +1,90 @@
+<div class="admin-dashboard">
+  <div class="admin-panel">
+
+    <div class="page-header">
+      <h2>Admin Dashboard</h2>
+    </div>
+
+    <p *ngIf="loading">Loading dashboard...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <div class="stats-grid" *ngIf="!loading && dashboard">
+
+      <div class="stat-card orders">
+        <div class="stat-header">
+          <span class="material-icons">shopping_cart</span>
+          <h4>Total Orders</h4>
+        </div>
+        <p class="stat-value">{{ dashboard.totalOrders }}</p>
+      </div>
+
+      <div class="stat-card pending">
+        <div class="stat-header">
+          <span class="material-icons">hourglass_top</span>
+          <h4>Pending Orders</h4>
+        </div>
+        <p class="stat-value">{{ dashboard.pendingOrders }}</p>
+      </div>
+
+      <div class="stat-card products">
+        <div class="stat-header">
+          <span class="material-icons">inventory_2</span>
+          <h4>Total Products</h4>
+        </div>
+        <p class="stat-value">{{ dashboard.totalProducts }}</p>
+      </div>
+
+      <div class="stat-card customers">
+        <div class="stat-header">
+          <span class="material-icons">groups</span>
+          <h4>Total Customers</h4>
+        </div>
+        <p class="stat-value">{{ dashboard.totalCustomers }}</p>
+      </div>
+
+      <div class="chart-actions">
+        <button class="chart-btn orders-btn" [ngClass]="{ 'active-chart-btn': selectedChart === 'orders' }"
+          (click)="showOrdersChart()">
+          Orders / Day
+        </button>
+
+        <button class="chart-btn revenue-btn" [ngClass]="{ 'active-chart-btn': selectedChart === 'revenue' }"
+          (click)="showRevenueChart()">
+          Revenue / Day
+        </button>
+
+        <button class="chart-btn top-sold-btn" [ngClass]="{ 'active-chart-btn': selectedChart === 'topSold' }"
+          (click)="showTopSoldChart()">
+          Top Sold
+        </button>
+
+        <button class="chart-btn stock-btn" [ngClass]="{ 'active-chart-btn': selectedChart === 'stock' }"
+          (click)="showStockChart()">
+          In Stock
+        </button>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <span class="material-icons chart-icon">{{ getChartIcon() }}</span>
+            <h3>{{ getChartTitle() }}</h3>
+          </div>
+
+          <div class="chart-export-actions">
+            <button class="export-chart-btn" (click)="exportChartAsImage()">
+              Export PNG
+            </button>
+
+            <button class="export-chart-btn pdf-export-btn" (click)="exportChartAsPdf()">
+              Export PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="chart-wrapper" [class.chart-fade]="chartVisible">
+          <canvas #dashboardCanvas></canvas>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,129 @@
+<!-- user-order-detail.component.html -->
+<div class="order-detail-container">
+  <div class="order-detail-header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>Order Details</h2>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading order details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="alert alert-danger">
+    <mat-icon>error</mat-icon>
+    <span>{{ error }}</span>
+  </div>
+
+  <!-- Order Details -->
+  <div *ngIf="!loading && !error && order" class="order-content">
+    <!-- Order Summary Card -->
+    <div class="order-summary">
+      <div class="summary-header">
+        <div>
+          <h3>Order #{{ order.trackingNumber }}</h3>
+          <p class="order-date">Placed on {{ order.dateCreated | date:'fullDate' }}</p>
+        </div>
+        <div class="status-badge" [ngClass]="'status-' + order.status.toLowerCase()">
+          {{ order.status }}
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-item">
+          <mat-icon>receipt</mat-icon>
+          <div>
+            <strong>Order ID</strong>
+            <span>#{{ order.id }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <mat-icon>attach_money</mat-icon>
+          <div>
+            <strong>Total Amount</strong>
+            <span class="total-price">R$ {{ order.totalPrice | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <mat-icon>shopping_cart</mat-icon>
+          <div>
+            <strong>Total Items</strong>
+            <span>{{ order.totalQuantity }} units</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <mat-icon>update</mat-icon>
+          <div>
+            <strong>Last Updated</strong>
+            <span>{{ order.dateUpdated | date:'medium' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="order-items-section">
+      <h3>Order Items</h3>
+      <div class="items-list">
+        <div *ngFor="let item of order.items" class="order-item">
+          <img [src]="item.imageUrl" [alt]="item.productName" class="item-image"
+               (error)="handleMissingImage($event)">
+          <div class="item-details">
+            <h4>{{ item.productName }}</h4>
+            <p class="item-price">R$ {{ item.unitPrice | number:'1.2-2' }}</p>
+            <p class="item-quantity">Quantity: {{ item.quantity }}</p>
+          </div>
+          <div class="item-subtotal">
+            <strong>Subtotal:</strong>
+            <span class="subtotal-price">R$ {{ item.subtotal | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-total">
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <span>R$ {{ order.totalPrice | number:'1.2-2' }}</span>
+        </div>
+        <div class="total-row shipping">
+          <span>Shipping:</span>
+          <span>Free</span>
+        </div>
+        <div class="total-row grand-total">
+          <strong>Total:</strong>
+          <strong>R$ {{ order.totalPrice | number:'1.2-2' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Addresses -->
+    <div class="addresses-section">
+      <div class="address-card" *ngIf="order.shippingAddress">
+        <h4>
+          <mat-icon>local_shipping</mat-icon>
+          Shipping Address
+        </h4>
+        <p>{{ order.shippingAddress.street }}</p>
+        <p>{{ order.shippingAddress.city }}, {{ order.shippingAddress.state }}</p>
+        <p>{{ order.shippingAddress.country }} - {{ order.shippingAddress.zipCode }}</p>
+      </div>
+
+      <div class="address-card" *ngIf="order.billingAddress">
+        <h4>
+          <mat-icon>credit_card</mat-icon>
+          Billing Address
+        </h4>
+        <p>{{ order.billingAddress.street }}</p>
+        <p>{{ order.billingAddress.city }}, {{ order.billingAddress.state }}</p>
+        <p>{{ order.billingAddress.country }} - {{ order.billingAddress.zipCode }}</p>
+      </div>
+    </div>
+  </div>
+</div>

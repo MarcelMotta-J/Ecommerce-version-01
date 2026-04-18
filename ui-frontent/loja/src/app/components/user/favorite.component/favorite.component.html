@@ -1,0 +1,53 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+
+      <div class="favorites-header">
+        <h2>My Favorites</h2>
+
+        <span class="favorite-count-badge">
+          {{ favoriteProducts.length }}
+        </span>
+
+        <p>Your saved products</p>
+      </div>
+
+      <div *ngIf="loading" class="alert alert-info">
+        Loading favorites...
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <div class="row" *ngIf="!loading && favoriteProducts.length > 0">
+        <div *ngFor="let product of favoriteProducts" class="col-md-3 mb-4">
+          <app-product-card
+            [product]="product"
+            [showFavoriteButton]="true"
+            [favoriteActive]="true"
+            [showAddToCart]="true"
+            [showRemoveButton]="true"
+            (addToCartClicked)="addToCart($event)"
+            (favoriteToggled)="removeFavorite(product.id)"
+            (removeClicked)="removeFavorite($event)">
+          </app-product-card>
+        </div>
+      </div>
+
+      <div *ngIf="!loading && favoriteProducts.length === 0" class="empty-state">
+        <span class="material-icons empty-state-icon">favorite_border</span>
+
+        <h3>No favorites yet</h3>
+        <p>Save products you like and come back to them later.</p>
+
+        <div class="empty-state-actions">
+          <button class="btn btn-primary" routerLink="/products">
+            Browse Products
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

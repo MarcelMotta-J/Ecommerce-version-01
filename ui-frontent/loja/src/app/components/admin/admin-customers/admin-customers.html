@@ -1,0 +1,79 @@
+<div class="admin-customers">
+
+  <div class="admin-panel">
+
+    <div class="page-header">
+      <h2>Customers</h2>
+    </div>
+
+    <p *ngIf="loading">Loading customers...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <p *ngIf="!loading && totalElements > 0" style="color: blue;">
+      Total customers: {{ totalElements }}
+    </p>
+
+    <table *ngIf="!loading && customers.length > 0">
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Orders</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let customer of customers">
+
+          <td>{{ customer.id }}</td>
+
+          <td>
+            {{ customer.firstName }} {{ customer.lastName }}
+          </td>
+
+          <td>{{ customer.email }}</td>
+
+          <td>{{ customer.ordersCount }}</td>
+
+          <td class="actions-cell">
+            <button class="edit-btn" (click)="editCustomer(customer.id)">
+              Edit
+            </button>
+
+            <button class="delete-btn" (click)="deleteCustomer(customer.id)">
+              Delete
+            </button>
+          </td>
+
+        </tr>
+      </tbody>
+
+    </table>
+
+    <p *ngIf="!loading && customers.length === 0">
+      No customers found.
+    </p>
+
+
+
+    <div class="pagination" *ngIf="totalPages > 0" style="color: blue;">
+
+      <button (click)="previousPage()" [disabled]="page === 0">
+        Previous
+      </button>
+
+      <span>
+        Page {{ page + 1 }} of {{ totalPages }}
+      </span>
+
+      <button (click)="nextPage()" [disabled]="page + 1 >= totalPages">
+        Next
+      </button>
+
+    </div>
+  </div>
+
+</div>

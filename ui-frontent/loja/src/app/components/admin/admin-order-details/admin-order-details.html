@@ -1,0 +1,109 @@
+<div class="admin-order-details">
+  <p *ngIf="loading">Loading order details...</p>
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <div class="admin-panel" *ngIf="!loading && order">
+
+    <button class="back-btn" (click)="goBackToOrders()">
+      ← Back to Orders
+    </button>
+
+
+    <div class="page-header">
+      <h2>Order Details</h2>
+      <span [ngClass]="{
+          'pending-badge': order.status === 'PENDING',
+          'paid-badge': order.status === 'PAID',
+          'shipped-badge': order.status === 'SHIPPED',
+          'cancelled-badge': order.status === 'CANCELLED'
+        }">
+        {{ order.status }}
+      </span>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h3>Order Summary</h3>
+        <p><strong>Order ID:</strong> {{ order.id }}</p>
+        <p><strong>Tracking Number:</strong> {{ order.trackingNumber }}</p>
+        <p><strong>Total Price:</strong> {{ order.totalPrice | currency }}</p>
+        <p><strong>Total Quantity:</strong> {{ order.totalQuantity }}</p>
+        <p><strong>Date Created:</strong> {{ order.dateCreated | date:'medium' }}</p>
+        <p><strong>Last Updated:</strong> {{ order.dateUpdated | date:'medium' }}</p>
+        <p><strong>User Email:</strong> {{ order.userEmail || 'Guest checkout' }}</p>
+
+        <div class="status-update">
+          <label for="status"><strong>Update Status:</strong></label>
+
+          <select id="status" [(ngModel)]="selectedStatus">
+            <option value="PENDING">PENDING</option>
+            <option value="PAID">PAID</option>
+            <option value="SHIPPED">SHIPPED</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </select>
+
+          <button class="update-btn" (click)="updateStatus()" [disabled]="!order || selectedStatus === order.status">
+            Update
+          </button>
+        </div>
+
+        <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+      </div>
+
+      <div class="summary-card">
+        <h3>Customer</h3>
+        <p><strong>ID:</strong> {{ order.customer.id }}</p>
+        <p><strong>Name:</strong> {{ order.customer.firstName }} {{ order.customer.lastName }}</p>
+        <p><strong>Email:</strong> {{ order.customer.email }}</p>
+      </div>
+    </div>
+
+    <div class="address-grid">
+      <div class="summary-card">
+        <h3>Shipping Address</h3>
+        <p>{{ order.shippingAddress.street }}</p>
+        <p>{{ order.shippingAddress.city }}, {{ order.shippingAddress.state }}</p>
+        <p>{{ order.shippingAddress.country }}</p>
+        <p>{{ order.shippingAddress.zipCode }}</p>
+      </div>
+
+      <div class="summary-card">
+        <h3>Billing Address</h3>
+        <p>{{ order.billingAddress.street }}</p>
+        <p>{{ order.billingAddress.city }}, {{ order.billingAddress.state }}</p>
+        <p>{{ order.billingAddress.country }}</p>
+        <p>{{ order.billingAddress.zipCode }}</p>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h3>Items</h3>
+
+      <table *ngIf="order.items.length > 0">
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Product ID</th>
+            <th>Image</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of order.items">
+            <td>{{ item.id }}</td>
+            <td>{{ item.productId }}</td>
+            <td>
+              <img [src]="item.imageUrl" alt="Product image" class="product-thumb" />
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unitPrice | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="order.items.length === 0">No items found for this order.</p>
+    </div>
+  </div>
+</div>

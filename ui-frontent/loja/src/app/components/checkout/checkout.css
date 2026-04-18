@@ -1,0 +1,137 @@
+.checkout-header {
+  margin-bottom: 30px;
+}
+
+.checkout-header h2 {
+  margin-bottom: 6px;
+  color: #2d3748;
+}
+
+.checkout-header p {
+  color: #718096;
+}
+
+
+.saved-addresses {
+  margin: 20px 0;
+}
+
+.address-option {
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.address-option:hover {
+  border-color: #1976d2;
+}
+
+.address-option.selected {
+  border: 2px solid #1976d2;
+  background: #e3f2fd;
+}
+
+.default-badge {
+  font-size: 12px;
+  color: green;
+  font-weight: bold;
+}
+
+.saved-addresses {
+  margin-bottom: 20px;
+}
+
+.address-option {
+  cursor: pointer;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  transition: 0.2s;
+}
+
+.address-option:hover {
+  border-color: #1976d2;
+}
+
+.address-option.selected {
+  border: 2px solid #1976d2;
+  background: #e3f2fd;
+}
+
+.default-badge {
+  font-size: 12px;
+  color: green;
+  font-weight: bold;
+}
+
+
+.input-space button {
+  margin-bottom: 15px;
+}
+
+.new-address-box {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.add-address-btn-wrap {
+  margin: 16px 0 28px 0;
+  position: relative;
+  z-index: 5;
+}
+
+.add-address-btn-wrap button {
+  background: #fff;
+}
+
+.saved-addresses {
+  margin-bottom: 12px;
+}
+
+
+
+
+.add-address-btn-wrap {
+  margin: 20px 0;
+  z-index: 10;
+  position: relative;
+}
+
+.checkbox-inline-native {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  position: relative;
+}
+
+.checkbox-inline-native .au-checkmark {
+  position: static;
+  transform: none;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.checkbox-inline-native .checkbox-text {
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.checkbox-inline-native input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox-fix {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  padding-left: 0; /* remove offset antigo */
+}
+
+

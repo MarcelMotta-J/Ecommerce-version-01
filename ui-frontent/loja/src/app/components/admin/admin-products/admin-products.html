@@ -1,0 +1,91 @@
+<div class="admin-products">
+  <div class="admin-panel">
+    <h2>Admin Products</h2>
+
+    <div class="filters">
+      <input type="text" [(ngModel)]="name" placeholder="Search by name" />
+
+      <select [(ngModel)]="categoryId">
+        <option [ngValue]="null">All categories</option>
+        <option [ngValue]="1">Books</option>
+        <option [ngValue]="2">Coffee Mugs</option>
+        <option [ngValue]="3">Mouse Pads</option>
+        <option [ngValue]="4">Luggage Tags</option>
+      </select>
+
+      <select [(ngModel)]="active">
+        <option [ngValue]="null">All</option>
+        <option [ngValue]="true">Active</option>
+        <option [ngValue]="false">Inactive</option>
+      </select>
+
+      <button (click)="search()">Search</button>
+      <button (click)="clearFilters()">Clear</button>
+    </div>
+
+    <p *ngIf="loading">Loading products...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <p *ngIf="!loading && totalElements > 0"  style="color: blue;">
+      Total products: {{ totalElements }}
+    </p>
+
+    <table *ngIf="!loading && products.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>SKU</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.id }}</td>
+          <td>{{ product.sku }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.categoryName }}</td>
+          <td>{{ product.unitPrice | currency }}</td>
+          <td>
+            <input
+              type="number"
+              [value]="product.unitsInStock"
+              (change)="updateStock(product, $event)"
+              min="0"
+            />
+          </td>
+          <td>
+            <span [class.active-badge]="product.active" [class.inactive-badge]="!product.active">
+              {{ product.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <button
+              [ngClass]="{
+                'action-btn': true,
+                'activate-btn': !product.active,
+                'deactivate-btn': product.active
+              }"
+              (click)="toggleActive(product)"
+            >
+              {{ product.active ? 'Deactivate' : 'Activate' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!loading && products.length === 0">No products found.</p>
+
+    <div class="pagination" *ngIf="totalPages > 0" style="color: blue;">
+      <button (click)="previousPage()" [disabled]="page === 0">Previous</button>
+      <span>Page {{ page + 1 }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="page + 1 >= totalPages">Next</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Units in Stock</th> 
+        </tr>
+    </thead>
+    <tbody >
+        <tr *ngFor="let tempProduct of products" >
+            <td class="align-middle">
+                <img [src]= "tempProduct.imageUrl"   height="50" (error)="handleMissingImage($event)"/>
+            </td>
+            <td class="text-primary align-middle">{{ tempProduct.name }} </td>
+            <td class="align-middle">{{ tempProduct.unitPrice  | currency: 'BRL' }}</td>
+            <td class="text-success align-middle">{{ tempProduct.unitsInStock }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+

@@ -1,0 +1,221 @@
+<!-- src/app/components/user-profile/user-profile.html -->
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>My Account</h2>
+    <p>Manage your profile, addresses, and orders</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <div class="profile-tabs">
+    <button [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'">
+      Profile
+    </button>
+    <button [class.active]="activeTab === 'addresses'" (click)="activeTab = 'addresses'">
+      Addresses
+    </button>
+    <button [class.active]="activeTab === 'orders'" (click)="activeTab = 'orders'">
+      Order History
+    </button>
+  </div>
+
+  <div class="tab-content">
+    <!-- Profile Tab -->
+    <div *ngIf="activeTab === 'profile'" class="profile-tab">
+      <div class="profile-info" *ngIf="profile">
+        <p><strong>Email:</strong> {{ profile.email }}</p>
+        <p><strong>Member since:</strong> {{ profile.createdAt | date }}</p>
+      </div>
+
+      <div class="default-shipping-card" *ngIf="defaultAddress">
+        <h3>Default Shipping Address</h3>
+        <p><strong>Street:</strong> {{ defaultAddress.street }}</p>
+        <p><strong>City:</strong> {{ defaultAddress.city }}</p>
+        <p><strong>State:</strong> {{ defaultAddress.state }}</p>
+        <p><strong>Country:</strong> {{ defaultAddress.country }}</p>
+        <p><strong>Zip Code:</strong> {{ defaultAddress.zipCode }}</p>
+        <button class="btn btn-outline-primary btn-sm" (click)="activeTab = 'addresses'">
+          Manage Addresses
+        </button>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
+        <h3>Edit Profile</h3>
+
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" formControlName="firstName">
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" formControlName="lastName">
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" class="form-control" formControlName="phoneNumber">
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          Update Profile
+        </button>
+      </form>
+    </div>
+
+    <!-- Addresses Tab -->
+    <div *ngIf="activeTab === 'addresses'" class="addresses-tab">
+      <button class="btn btn-primary mb-3" (click)="openAddressForm()">
+        Add New Address
+      </button>
+
+      <div *ngIf="showAddressForm" class="address-form">
+        <h4>{{ editingAddress ? 'Edit' : 'Add' }} Address</h4>
+      </div>
+
+      <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Street Address</mat-label>
+          <input matInput formControlName="street">
+
+          <mat-error *ngIf="addressStreet?.invalid && (addressStreet?.dirty || addressStreet?.touched)">
+            Street Address is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city">
+
+          <mat-error *ngIf="addressCity?.invalid && (addressCity?.dirty || addressCity?.touched)">
+            City is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Country</mat-label>
+
+          <mat-select formControlName="country" (selectionChange)="onCountryChange()">
+
+            <mat-option>
+              <input matInput placeholder="Search country..." [(ngModel)]="countryFilter"
+                [ngModelOptions]="{ standalone: true }" (input)="filterCountries()" (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()">
+            </mat-option>
+
+            <mat-option [value]="''">Select a country</mat-option>
+
+            <mat-option *ngFor="let country of filteredCountries" [value]="country.name">
+              {{ country.name }}
+              <span *ngIf="addressCountry?.value === country.name"> ✔</span>
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="addressCountry?.invalid && (addressCountry?.dirty || addressCountry?.touched)">
+            Country is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>State</mat-label>
+
+          <mat-select formControlName="state">
+
+            <mat-option>
+              <input matInput placeholder="Search state..." [(ngModel)]="stateFilter"
+                [ngModelOptions]="{ standalone: true }" (input)="filterStates()" (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()">
+            </mat-option>
+
+            <mat-option [value]="''">Select a state</mat-option>
+
+            <mat-option *ngFor="let state of filteredStates" [value]="state.name">
+              {{ state.name }}
+              <span *ngIf="addressState?.value === state.name"> ✔</span>
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="addressState?.invalid && (addressState?.dirty || addressState?.touched)">
+            State is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Zip Code</mat-label>
+          <input matInput formControlName="zipCode">
+
+          <mat-error *ngIf="addressZipCode?.invalid && (addressZipCode?.dirty || addressZipCode?.touched)">
+            Zip Code is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="isDefault" class="mb-3">
+          Set as default address
+        </mat-checkbox>
+
+        <div class="form-actions">
+          <button mat-raised-button 
+            color="primary" 
+            class="btn-primary-custom" 
+            type="submit"
+            [disabled]="loading || addressForm.invalid">
+            {{ editingAddress ? 'Update Address' : 'Save Address' }}
+          </button>
+
+          <button mat-button type="button" (click)="cancelAddressForm()" [disabled]="loading">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <div class="address-list">
+        <div *ngFor="let address of addresses" class="address-card">
+          <div class="address-content">
+            <p>{{ address.street }}</p>
+            <p>{{ address.city }}, {{ address.state }} {{ address.zipCode }}</p>
+            <p>{{ address.country }}</p>
+            <span *ngIf="address.isDefault" class="badge bg-success">Default</span>
+          </div>
+          <div class="address-actions">
+            <button class="btn btn-sm btn-info" (click)="openAddressForm(address)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteAddress(address.id!)">Delete</button>
+            <button *ngIf="!address.isDefault" class="btn btn-sm btn-secondary"
+              (click)="setDefaultAddress(address.id!)">
+              Set as Default
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Tab -->
+    <div *ngIf="activeTab === 'orders'" class="orders-tab">
+      <div *ngIf="orders.length === 0" class="no-orders">
+        <p>You haven't placed any orders yet.</p>
+        <a routerLink="/products" class="btn btn-primary">Start Shopping</a>
+      </div>
+
+      <div *ngFor="let order of orders" class="order-card">
+        <div class="order-header">
+          <h5>Order #{{ order.trackingNumber }}</h5>
+          <span class="badge" [ngClass]="{
+            'bg-warning': order.status === 'PENDING',
+            'bg-success': order.status === 'PAID',
+            'bg-info': order.status === 'SHIPPED',
+            'bg-secondary': order.status === 'CANCELLED'
+          }">{{ order.status }}</span>
+        </div>
+        <div class="order-details">
+          <p><strong>Date:</strong> {{ order.dateCreated | date }}</p>
+          <p><strong>Items:</strong> {{ order.itemCount }}</p>
+          <p><strong>Total:</strong> ${{ order.totalPrice }}</p>
+        </div>
+        <button class="btn btn-sm btn-outline-primary" [routerLink]="['/orders', order.id]">
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

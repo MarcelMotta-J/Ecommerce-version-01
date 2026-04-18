@@ -1,0 +1,149 @@
+/* Container geral */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+  padding: 20px;
+}
+
+/* Card principal */
+.register-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+.register-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.logo-icon {
+  font-size: 32px;
+  color: #3f51b5;
+}
+
+.register-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.register-header h2 {
+  margin: 5px 0;
+  font-size: 20px;
+  color: #555;
+}
+
+.register-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #777;
+}
+
+/* Form */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Botão */
+.register-button {
+  height: 45px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mensagens */
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.alert-error {
+  background-color: #fdecea;
+  color: #d32f2f;
+}
+
+.alert-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.alert mat-icon {
+  margin-right: 8px;
+}
+
+.alert-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Divider */
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.divider span {
+  background: white;
+  padding: 0 10px;
+  position: relative;
+  z-index: 2;
+  color: #888;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+  z-index: 1;
+}
+
+/* Login link */
+.login-section {
+  text-align: center;
+}
+
+.login-section p {
+  margin-bottom: 8px;
+  color: #666;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .register-card {
+    padding: 20px;
+  }
+}

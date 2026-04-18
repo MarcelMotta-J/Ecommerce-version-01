@@ -1,0 +1,807 @@
+/* user-profile.component.css */
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: calc(100vh - 64px);
+  background: #f8f9fa;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.profile-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 32px;
+  color: #333;
+  font-weight: 500;
+}
+
+.profile-header p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+/* Tabs */
+.profile-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.tab-btn {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.tab-btn.active {
+  color: #667eea;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #667eea;
+}
+
+/* Tab Content */
+.tab-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Profile Tab */
+.profile-info {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.profile-info p {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+.profile-info p strong {
+  color: #333;
+  width: 120px;
+  display: inline-block;
+}
+
+.profile-form h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-primary {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Addresses Tab */
+.addresses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.address-form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.address-form h4 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.form-check input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.form-check label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.address-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.address-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.address-card:hover {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.address-card.default {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.02);
+}
+
+.default-badge {
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.address-content p {
+  margin: 0 0 8px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.address-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-info {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-info:hover {
+  background: #1976d2;
+  color: white;
+}
+
+.btn-danger {
+  background: #ffebee;
+  color: #c62828;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #c62828;
+  color: white;
+}
+
+/* Orders Tab */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.order-header h5 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-warning {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.badge-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-info {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.badge-danger {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.order-details {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.order-details p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.order-details p strong {
+  color: #666;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.no-orders p {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+/* Loading Spinner */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Alerts */
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.alert-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #2e7d32;
+}
+
+.alert-danger {
+  background-color: #ffebee;
+  color: #c62828;
+  border-left: 4px solid #c62828;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px;
+  }
+  
+  .profile-tabs {
+    overflow-x: auto;
+  }
+  
+  .tab-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .tab-content {
+    padding: 20px;
+  }
+  
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .address-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .order-details {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .profile-info p strong {
+    width: 100%;
+    display: block;
+    margin-bottom: 5px;
+  }
+}
+
+
+.default-shipping-card {
+  margin-top: 20px;
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.default-shipping-card h3 {
+  margin-bottom: 12px;
+  color: #2d3748;
+}
+
+.default-shipping-card p {
+  margin-bottom: 6px;
+  color: #4a5568;
+}
+
+.empty-default-address {
+  border-style: dashed;
+}
+
+
+address-form .form-group {
+  margin-bottom: 16px;
+}
+
+.address-form select.form-control,
+.address-form input.form-control {
+  min-height: 42px;
+}
+
+/* css do dropdown select country state */
+custom-select option {
+  padding: 8px;
+}
+
+.selected-option {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+
+/* css do dropdown select country state Amazon style*/
+form-control.custom-select {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: 0.2s;
+}
+
+.form-control.custom-select:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25,118,210,0.2);
+}
+
+.form-control.custom-select option:checked {
+  background-color: #1976d2;
+  color: white;
+}
+
+
+.w-100 {
+  width: 100%;
+}
+
+.address-form .mat-mdc-form-field {
+  margin-bottom: 14px;
+}
+
+
+.w-100 {
+  width: 100%;
+}
+
+.address-form .mat-mdc-form-field {
+  margin-bottom: 14px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mb-3 {
+  display: block;
+  margin-bottom: 16px;
+}
+
+
+.btn-primary-custom {
+  background-color: #1976d2 !important;
+  color: white !important;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn-primary-custom:hover {
+  background-color: #1565c0 !important;
+}
+
+.btn-primary-custom:disabled {
+  background-color: #90caf9 !important;
+  color: #e0e0e0 !important;
+}
+
+
+
+/* now for angular material*/
+
+.profile-container {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.profile-header {
+  margin-bottom: 20px;
+}
+
+.profile-header h2 {
+  margin-bottom: 6px;
+}
+
+.profile-header p {
+  color: #666;
+}
+
+.tab-section {
+  padding: 20px 0;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.form-card,
+.info-card,
+.address-card,
+.order-card,
+.empty-card,
+.message-card {
+  margin-bottom: 18px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.btn-primary-custom {
+  background-color: #1976d2 !important;
+  color: white !important;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn-primary-custom:hover {
+  background-color: #1565c0 !important;
+}
+
+.btn-primary-custom:disabled {
+  background-color: #90caf9 !important;
+  color: #e0e0e0 !important;
+}
+
+.message-card {
+  padding: 12px 16px;
+}
+
+.error-card {
+  background: #fdecea;
+  color: #b71c1c;
+}
+
+.success-card {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.address-list,
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mb-3 {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.no-orders {
+  margin-top: 12px;
+}
+
+
+.w-100 {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.btn-primary-custom {
+  background-color: #1976d2 !important;
+  color: white !important;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+}
+
+.btn-primary-custom:hover {
+  background-color: #1565c0 !important;
+}
+
+.btn-primary-custom:disabled {
+  background-color: #90caf9 !important;
+  color: #e0e0e0 !important;
+}
+
+mat-card-actions button {
+  margin-right: 10px;
+}
+
+
+/* css for angular material buttons */
+
+/* status */
+/* STATUS BADGE */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* PENDING */
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* PAID */
+.status-badge.paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* SHIPPED */
+.status-badge.shipped {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* CANCELLED */
+.status-badge.cancelled {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+
+/* order card */
+.order-card {
+  margin-bottom: 16px;
+  padding: 12px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-details {
+  margin-top: 10px;
+}
+
+.order-actions {
+  margin-top: 10px;
+}
+
+/* address buttons */
+/* BASE */
+.address-actions button {
+  margin-right: 8px;
+}
+
+/* EDIT */
+.btn-edit {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+/* DELETE */
+.btn-delete {
+  background-color: #fdecea;
+  color: #c62828;
+}
+
+/* DEFAULT */
+.btn-default {
+  background-color: #f1f8e9;
+  color: #558b2f;
+}

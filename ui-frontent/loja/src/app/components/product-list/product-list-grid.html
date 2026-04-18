@@ -1,0 +1,61 @@
+<div class="main-content">
+    <div class="section-content section-content-p30">
+
+        <h4>Category: <p class="text-primary">{{ currentCategoryName }} </p>
+        </h4>
+        <hr>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- loop over the collection of products -->
+                
+                <!-- if products empty display a message -->
+                <div *ngFor="let tempProduct of products" class="col-md-3 mb-4">
+                <app-product-card
+                    [product]="tempProduct"
+                    [showFavoriteButton]="true"
+                    [favoriteActive]="isFavorite(tempProduct.id)"
+                    [showAddToCart]="true"
+                    [showRemoveButton]="false"
+                    (addToCartClicked)="addToCart($event)"
+                    (favoriteToggled)="toggleFavorite(tempProduct.id, $event)">
+                </app-product-card>
+                </div>
+            </div>
+
+            <!--begin footer-->
+            <div class="footer-pagination">
+                <div class="row">
+                    <div class="col-md-6"></div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <ngb-pagination [collectionSize]="theTotalElements" [(page)]="thePageNumber"
+                                    [pageSize]="thePageSize" (pageChange)="listProducts()" [maxSize]="5"
+                                    [boundaryLinks]="true">
+                                </ngb-pagination>
+                            </div>
+
+                            <div class="col-md-3 mt-2" style="text-align: right;">
+                                <span class="mr-2">Page Size</span>
+                                <select #myPageSelect (change)="updatePageSize(myPageSelect.value)">
+                                    <option>2</option>
+                                    <option selected="true">5</option>
+                                    <option>10</option>
+                                    <option>20</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--end footer-->
+
+        </div>
+    </div>
+</div>

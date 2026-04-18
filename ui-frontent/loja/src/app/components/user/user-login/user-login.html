@@ -1,0 +1,153 @@
+<!-- user-login.component.html -->
+<div class="login-container">
+  <div class="login-card">
+    <!-- Header Section -->
+    <div class="login-header">
+      <div class="logo">
+        <mat-icon class="logo-icon">store</mat-icon>
+        <h1>E-Store</h1>
+      </div>
+      <h2>Welcome Back!</h2>
+      <p>Sign in to continue shopping</p>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="error" class="alert alert-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+      <button class="alert-close" (click)="error = ''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Email Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email Address</mat-label>
+        <input 
+          matInput 
+          type="email" 
+          formControlName="email" 
+          placeholder="your@email.com"
+          autocomplete="email">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Password Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input 
+          matInput 
+          [type]="hidePassword ? 'password' : 'text'" 
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="form-options">
+        <mat-checkbox formControlName="rememberMe" color="primary">
+          Remember me
+        </mat-checkbox>
+        <a routerLink="/forgot-password" class="forgot-link">
+          Forgot Password?
+        </a>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit" 
+        class="login-button"
+        [disabled]="loginForm.invalid || loading">
+        <mat-icon *ngIf="!loading">login</mat-icon>
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        <span *ngIf="!loading">Sign In</span>
+      </button>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <!-- Register Link -->
+      <div class="register-section">
+        <p>New to E-Store?</p>
+        <button 
+          mat-stroked-button 
+          color="primary" 
+          type="button"
+          routerLink="/register"
+          class="register-button">
+          Create Account
+        </button>
+      </div>
+    </form>
+
+    <!-- Demo Credentials (for testing) -->
+    <div class="demo-credentials" *ngIf="showDemo">
+      <mat-divider></mat-divider>
+      <div class="demo-header">
+        <mat-icon>info</mat-icon>
+        <span>Demo Credentials</span>
+      </div>
+      <div class="demo-content">
+        <div class="demo-item" (click)="fillDemoCredentials('user@example.com', 'password123')">
+          <mat-icon>person</mat-icon>
+          <div>
+            <strong>User Account</strong>
+            <p>user@example.com / password123</p>
+          </div>
+        </div>
+        <div class="demo-item" (click)="fillDemoCredentials('admin@example.com', 'admin123')">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <div>
+            <strong>Admin Account</strong>
+            <p>admin@example.com / admin123</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Login (Optional) -->
+    <div class="social-login" *ngIf="showSocialLogin">
+      <div class="divider">
+        <span>Or continue with</span>
+      </div>
+      <div class="social-buttons">
+        <button mat-stroked-button class="social-btn google">
+          <mat-icon>google</mat-icon>
+          Google
+        </button>
+        <button mat-stroked-button class="social-btn facebook">
+          <mat-icon>facebook</mat-icon>
+          Facebook
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

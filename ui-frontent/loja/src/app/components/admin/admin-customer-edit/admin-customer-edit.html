@@ -1,0 +1,54 @@
+
+<div class="admin-customer-edit">
+
+  <div class="admin-panel">
+
+    <div class="page-header">
+      <h2>Edit Customer</h2>
+    </div>
+
+    <p *ngIf="loading">Loading customer...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+
+    <form *ngIf="!loading" (ngSubmit)="saveCustomer()">
+
+      <label>First Name</label>
+      <input
+        type="text"
+        [(ngModel)]="firstName"
+        name="firstName"
+        required
+      />
+
+      <label>Last Name</label>
+      <input
+        type="text"
+        [(ngModel)]="lastName"
+        name="lastName"
+        required
+      />
+
+      <label>Email</label>
+      <input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
+
+      <div class="form-actions">
+        <button type="submit" class="save-btn" [disabled]="loading">
+          Save
+        </button>
+
+        <button type="button" class="cancel-btn" (click)="goBack()">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

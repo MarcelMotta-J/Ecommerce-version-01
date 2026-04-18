@@ -1,0 +1,368 @@
+import { Component, OnInit } from '@angular/core';
+
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../../services/user/user.service';
+import { UserProfileResponse } from '../../../common/user/user-profile-response';
+import { UserAddressResponse } from '../../../common/user/user-address-response';
+import { UserOrderResponse } from '../../../common/user/user-order-response';
+
+import { Country } from '../../../common/country';
+import { State } from '../../../common/state';
+import { LojaFormService } from '../../../services/loja-form-service';
+
+@Component({
+  selector: 'app-user-profile',
+  standalone: false,
+  templateUrl: './user-profile.html',
+  styleUrl: './user-profile.css',
+})
+export class UserProfile implements OnInit {
+
+  profileForm: FormGroup;
+  profile: UserProfileResponse | null = null;
+  addresses: UserAddressResponse[] = [];
+  orders: UserOrderResponse[] = [];
+
+  loading = false;
+  error = '';
+  successMessage = '';
+  activeTab: 'profile' | 'addresses' | 'orders' = 'profile';
+
+  showAddressForm = false;
+  editingAddress: UserAddressResponse | null = null;
+  addressForm: FormGroup;
+
+  defaultAddress: UserAddressResponse | null = null;
+
+  states: State[] = [];
+  countries: Country[] = [];
+
+  countryFilter = '';
+  filteredCountries: Country[] = [];
+
+  stateFilter = '';
+  filteredStates: State[] = [];
+
+  selectedTabIndex = 0;
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private lojaFormService: LojaFormService
+  ) {
+    this.profileForm = this.fb.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      phoneNumber: ['']
+    });
+
+    this.addressForm = this.fb.group({
+      street: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      country: ['', [Validators.required]],
+      zipCode: ['', [Validators.required]],
+      isDefault: [false]
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadUserData();
+    this.loadCountries();
+  }
+
+  /*
+  loadUserData(): void {
+    this.loading = true;
+
+    this.userService.getProfile().subscribe({
+      next: (profile) => {
+        this.profile = profile;
+        this.profileForm.patchValue({
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          phoneNumber: profile.phoneNumber
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load profile';
+        this.loading = false;
+      }
+    });
+
+    this.userService.getAddresses().subscribe({
+      next: (addresses) => this.addresses = addresses
+    });
+
+    this.userService.getUserOrders().subscribe({
+      next: (orders) => this.orders = orders
+    });
+  }
+    */
+
+  loadUserData(): void {
+    this.loading = true;
+    this.error = '';
+
+    this.userService.getProfile().subscribe({
+      next: (profile) => {
+        this.profile = profile;
+        this.profileForm.patchValue({
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          phoneNumber: profile.phoneNumber
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load profile';
+        this.loading = false;
+      }
+    });
+
+    this.userService.getAddresses().subscribe({
+      next: (addresses) => {
+        this.addresses = addresses;
+        this.defaultAddress = addresses.find(address => address.isDefault) || null;
+      },
+      error: () => {
+        this.error = 'Failed to load addresses';
+      }
+    });
+    this.userService.getUserOrders().subscribe({
+      next: (response: any) => {
+        this.orders = Array.isArray(response) ? response : response.content || [];
+      }
+    });
+
+  }
+
+  updateProfile(): void {
+    if (this.profileForm.invalid) return;
+
+    this.loading = true;
+    this.userService.updateProfile(this.profileForm.value).subscribe({
+      next: (updated) => {
+        this.profile = updated;
+        this.successMessage = 'Profile updated successfully';
+        this.loading = false;
+        setTimeout(() => this.successMessage = '', 3000);
+      },
+      error: () => {
+        this.error = 'Failed to update profile';
+        this.loading = false;
+      }
+    });
+
+  }
+
+
+  openAddressForm(address?: UserAddressResponse): void {
+    if (address) {
+      this.editingAddress = address;
+
+      this.addressForm.patchValue({
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        country: address.country,
+        zipCode: address.zipCode,
+        isDefault: address.isDefault
+      });
+
+      this.countryFilter = '';
+      this.filteredCountries = this.countries;
+
+      const selectedCountry = this.countries.find(
+        country => country.name === address.country
+      );
+
+      if (selectedCountry) {
+        this.lojaFormService.getStates(selectedCountry.code).subscribe({
+          next: (data) => {
+            this.states = data;
+            this.filteredStates = data;
+            this.stateFilter = '';
+            this.addressForm.get('state')?.setValue(address.state);
+          },
+          error: (err) => {
+            console.error('Error loading states for edit', err);
+            this.states = [];
+            this.filteredStates = [];
+          }
+        });
+      }
+
+    } else {
+      this.editingAddress = null;
+      this.addressForm.reset({ isDefault: false });
+
+      this.countryFilter = '';
+      this.stateFilter = '';
+      this.filteredCountries = this.countries;
+      this.states = [];
+      this.filteredStates = [];
+    }
+
+    this.showAddressForm = true;
+  }
+
+
+  saveAddress(): void {
+    if (this.addressForm.invalid) {
+      console.log('FORM INVALID', this.addressForm.value);
+      this.addressForm.markAllAsTouched();
+      this.error = 'Please fill in all required address fields.';
+      return;
+    }
+
+    console.log('FORM OK', this.addressForm.value);
+
+    this.loading = true;
+    this.error = '';
+
+    const addressData = this.addressForm.value;
+
+    const operation = this.editingAddress
+      ? this.userService.updateAddress(this.editingAddress.id!, addressData)
+      : this.userService.addAddress(addressData);
+
+    operation.subscribe({
+      next: () => {
+        this.loadUserData();
+        this.showAddressForm = false;
+        this.loading = false;
+        this.successMessage = this.editingAddress
+          ? 'Address updated successfully'
+          : 'Address added successfully';
+
+        this.addressForm.reset({ isDefault: false });
+        this.states = [];
+        this.filteredStates = [];
+        this.countryFilter = '';
+        this.stateFilter = '';
+
+        setTimeout(() => this.successMessage = '', 3000);
+      },
+      error: () => {
+        this.error = 'Failed to save address';
+        this.loading = false;
+      }
+    });
+  }
+
+
+  deleteAddress(addressId: number): void {
+    if (!confirm('Are you sure you want to delete this address?')) return;
+
+    this.userService.deleteAddress(addressId).subscribe({
+      next: () => {
+        this.loadUserData();
+        this.successMessage = 'Address deleted successfully';
+        setTimeout(() => this.successMessage = '', 3000);
+      },
+      error: () => {
+        this.error = 'Failed to delete address';
+      }
+    });
+  }
+
+  setDefaultAddress(addressId: number): void {
+    this.userService.setDefaultAddress(addressId).subscribe({
+      next: () => this.loadUserData()
+    });
+  }
+
+  cancelAddressForm(): void {
+    this.showAddressForm = false;
+    this.editingAddress = null;
+  }
+
+
+  loadCountries(): void {
+    this.lojaFormService.getCountries().subscribe({
+      next: (data) => {
+        this.countries = data;
+        this.filteredCountries = data;
+      },
+      error: (err) => {
+        console.error('Error loading countries', err);
+      }
+    });
+  }
+
+  filterCountries(): void {
+    const term = this.countryFilter.toLowerCase().trim();
+
+    this.filteredCountries = this.countries.filter(country =>
+      country.name.toLowerCase().includes(term)
+    );
+  }
+
+  filterStates(): void {
+    const term = this.stateFilter.toLowerCase().trim();
+
+    this.filteredStates = this.states.filter(state =>
+      state.name.toLowerCase().includes(term)
+    );
+  }
+
+  onCountryChange(): void {
+    const selectedCountryName = this.addressForm.get('country')?.value;
+
+    const selectedCountry = this.countries.find(
+      country => country.name === selectedCountryName
+    );
+
+    this.addressForm.get('state')?.setValue('');
+    this.states = [];
+    this.filteredStates = [];
+    this.stateFilter = '';
+
+    if (!selectedCountry) {
+      return;
+    }
+
+    this.lojaFormService.getStates(selectedCountry.code).subscribe({
+      next: (data) => {
+        this.states = data;
+        this.filteredStates = data;
+      },
+      error: (err) => {
+        console.error('Error loading states', err);
+      }
+    });
+  }
+
+  goToAddressesTab(): void {
+    this.selectedTabIndex = 1;
+  }
+
+
+
+  get addressStreet() {
+    return this.addressForm.get('street');
+  }
+
+  get addressCity() {
+    return this.addressForm.get('city');
+  }
+
+  get addressCountry() {
+    return this.addressForm.get('country');
+  }
+
+  get addressState() {
+    return this.addressForm.get('state');
+  }
+
+  get addressZipCode() {
+    return this.addressForm.get('zipCode');
+  }
+
+
+
+
+}
+

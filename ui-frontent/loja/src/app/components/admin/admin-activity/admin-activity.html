@@ -1,0 +1,54 @@
+<div class="admin-activity">
+  <div class="admin-panel">
+    <div class="page-header">
+      <h2>Admin Activity</h2>
+    </div>
+
+    <div class="page-actions">
+      <button class="export-btn" (click)="exportTxt()">
+        Export TXT
+      </button>
+
+      <button class="export-btn pdf-btn" (click)="exportPdf()">
+        Export PDF
+      </button>
+    </div>
+
+
+    <p *ngIf="loading">Loading activity...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <p *ngIf="!loading && totalElements > 0" style="color: blue;">
+      Total activity entries: {{ totalElements }}
+    </p>
+
+    <table *ngIf="!loading && logs.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Admin Email</th>
+          <th>Action</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>{{ log.id }}</td>
+          <td>{{ log.adminEmail }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.timestamp | date:'medium' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!loading && logs.length === 0">No activity found.</p>
+  
+
+  <div class="pagination" *ngIf="totalPages > 0" style="color: blue;">
+    <button (click)="previousPage()" [disabled]="page === 0">Previous</button>
+    <span>Page {{ page + 1 }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="page + 1 >= totalPages">Next</button>
+  </div>
+
+</div>

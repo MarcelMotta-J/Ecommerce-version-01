@@ -1,0 +1,50 @@
+<div class="store-card">
+
+  <div class="store-card-top-action" *ngIf="showFavoriteButton">
+    <button
+      type="button"
+      class="favorite-btn"
+      (click)="onToggleFavorite($event)">
+
+      <span
+        class="material-icons favorite-icon"
+        [class.favorite-active]="favoriteActive">
+        {{ favoriteActive ? 'favorite' : 'favorite_border' }}
+      </span>
+    </button>
+  </div>
+
+  <div class="store-card-image">
+    <a [routerLink]="['/products', product.id]">
+      <img [src]="product.imageUrl" class="img-responsive">
+    </a>
+  </div>
+
+  <div class="store-card-title">
+    <a [routerLink]="['/products', product.id]">
+      {{ product.name }}
+    </a>
+  </div>
+
+  <div class="store-card-price">
+    {{ product.unitPrice | currency:'BRL' }}
+  </div>
+
+  <div class="store-card-actions">
+    <button
+      *ngIf="showAddToCart"
+      type="button"
+      class="btn btn-outline-primary btn-lg"
+      (click)="onAddToCart()">
+      Add to Cart
+    </button>
+
+    <button
+      *ngIf="showRemoveButton"
+      type="button"
+      class="btn btn-outline-danger btn-lg"
+      (click)="onRemove()">
+      Remove
+    </button>
+  </div>
+</div>

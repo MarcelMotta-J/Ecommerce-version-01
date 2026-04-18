@@ -1,0 +1,112 @@
+<div class="main-content">
+    <div class="section-content section-content-p30">
+        <div class="container-fluid">
+            <div *ngIf=" cartItems.length > 0 ">
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="20%">Product Image</th>
+                        <th width="50%">Product Detail</th>
+                        <th width="30%"></th>
+
+                    </tr>
+
+                    <tr *ngFor="let tempCartItem of cartItems">
+                        <td>
+                            <img [src]="tempCartItem.imageUrl" class="img-responsive" width="150px" />
+                        </td>
+
+                        <td>
+                            <p>{{ tempCartItem.name }}</p>
+                            <p>{{ tempCartItem.unitPrice | currency: 'BRL'}}</p>
+                        </td>
+
+                        <td>
+                            <div class="items" style="color: rgb(3, 113, 12);">
+                                <label style="font-weight: bold;">Quantity:&nbsp;&nbsp;</label>
+
+                                <div class="row no-gutters">
+                                    <div class="col">
+                                        <button (click)="incrementQuantity(tempCartItem)"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="col ml-4 mr-2">
+                                        {{ tempCartItem.quantity }}
+                                    </div>
+
+                                    <div class="col">
+                                        <button (click)="decrementQuantity(tempCartItem)"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="col-8"></div>
+                                </div>
+                            </div>
+                            <div class="text-center" style="text-decoration: none; ">
+                                <button type="button" class="btn btn-outline-primary btn-lg mt-2"
+                                    (click)="remove(tempCartItem)">Remove</button>
+                            </div>
+                            <p style="color: blue; font-weight: bold;" class="mt-2">Subtotal: {{ tempCartItem.quantity *
+                                tempCartItem.unitPrice | currency: 'BRL' }} </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <div style="color: red; font-weight: bold;">
+                                <p>Total Quantity: {{ totalQuantity }}</p>
+                                <p>Free Shipping</p>
+                                <p>Total Price: {{ totalPrice | currency: 'BRL' }}</p>
+
+                                <a [routerLink]="'/checkout'" class="btn btn-primary btn-lg  round">Ckeckout</a>
+                            </div>
+                        </td>
+
+                        <div *ngIf="authService.isLoggedIn(); else loginToCheckout" class="checkout-actions">
+                            <a routerLink="/checkout" class="btn btn-primary btn-lg">
+                                Proceed to Checkout
+                            </a>
+                        </div>
+
+                        <ng-template #loginToCheckout>
+                            <div class="checkout-guest-box">
+                                <span class="material-icons checkout-guest-icon">lock</span>
+
+                                <div class="checkout-guest-content">
+                                    <h4>Login required</h4>
+                                    <p>Please login or register to continue to checkout.</p>
+
+                                    <div class="checkout-guest-actions">
+                                        <a routerLink="/login" 
+                                        [queryParams]="{ returnUrl: '/checkout' }"
+                                            class="btn btn-primary">
+                                            Login
+                                        </a>
+
+                                        <a routerLink="/register" class="btn btn-outline-primary">
+                                            Register
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <!--if cart is empty then display a message-->
+            <div *ngIf="cartItems.length == 0" class="alert alert-warning col-lg-12" role="alert"
+                style="text-align: center;">
+                Your Shopping Cart is Empty.
+            </div>
+
+        </div>
+    </div>
+</div>

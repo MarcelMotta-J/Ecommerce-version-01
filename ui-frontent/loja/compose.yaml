@@ -1,0 +1,8 @@
+services:
+  frontend:
+    build:
+      context: ./ui-frontent/loja
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    restart: unless-stopped

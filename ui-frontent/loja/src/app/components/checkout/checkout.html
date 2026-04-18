@@ -1,0 +1,643 @@
+<div class="main-content page-m">
+    <div class="section-content section-content-p30">
+
+        <div class="checkout-header">
+            <h2>Checkout</h2>
+            <p>Complete your order safely and quickly.</p>
+        </div>
+
+
+        <div class="container-fluid">
+
+            <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+
+
+                <div class="input-space">
+                    <label class="au-checkbox">
+                        <input type="checkbox" (change)="toggleSavedProfile($event)">
+                        <span class="au-checkmark"></span>
+                        Fill customer and shipping data from my profile
+                    </label>
+                </div>
+
+                <!-- customer form group -->
+                <div formGroupName="customer" class="form-area">
+                    <h3>Customer</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>First Name</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>First Name</mat-label>
+
+                                    <input matInput formControlName="firstName" type="text">
+
+                                    <ng-container
+                                        *ngIf="customerFirstName?.invalid && (customerFirstName?.dirty || customerFirstName?.touched)">
+                                        <mat-error *ngIf="customerFirstName?.hasError('required')">
+                                            First Name is required
+                                        </mat-error>
+
+                                        <mat-error *ngIf="customerFirstName?.hasError('minlength')">
+                                            Must be at least 2 characters
+                                        </mat-error>
+
+                                        <mat-error *ngIf="customerFirstName?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </mat-error>
+                                    </ng-container>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Last Name</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Last Name</mat-label>
+
+                                    <input matInput formControlName="lastName" type="text">
+
+                                    <mat-error
+                                        *ngIf="customerLastName?.invalid && (customerLastName?.dirty || customerLastName?.touched)">
+                                        <span *ngIf="customerLastName?.hasError('required')">
+                                            Last Name is required
+                                        </span>
+
+                                        <span *ngIf="customerLastName?.hasError('minlength')">
+                                            Must be at least 2 characters
+                                        </span>
+
+                                        <span *ngIf="customerLastName?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Email</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Email</mat-label>
+
+                                    <input matInput formControlName="email" type="email">
+
+                                    <ng-container
+                                        *ngIf="customerEmail?.invalid && (customerEmail?.dirty || customerEmail?.touched)">
+
+                                        <mat-error *ngIf="customerEmail?.hasError('required')">
+                                            Email is required
+                                        </mat-error>
+
+                                        <mat-error *ngIf="customerEmail?.hasError('pattern')">
+                                            Must be a valid email address
+                                        </mat-error>
+
+                                    </ng-container>
+
+
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-space">
+                    <label class="au-checkbox checkbox-fix">
+                        <input
+                        type="checkbox"
+                        [(ngModel)]="useSavedAddress"
+                        [ngModelOptions]="{ standalone: true }"
+                        (change)="onToggleSavedAddress()">
+
+                        <span class="au-checkmark"></span>
+
+                        <span class="checkbox-text">
+                        Use my saved address
+                        </span>
+                    </label>
+                </div>
+
+
+                <!-- 🔥 AMAZON MODE ADDRESS-->
+                <div class="saved-addresses" *ngIf="savedAddresses.length > 0 && useSavedAddress">
+
+                    <h5>Select a saved address</h5>
+
+                    <mat-card *ngFor="let address of savedAddresses" class="address-option"
+                        (click)="selectAddress(address)" [ngClass]="{'selected': selectedAddress?.id === address.id}">
+
+                        <p>{{ address.street }}</p>
+                        <p>{{ address.city }}, {{ address.state }}</p>
+                        <p>{{ address.country }}</p>
+
+                        <span *ngIf="address.isDefault" class="default-badge">
+                            Default
+                        </span>
+
+                    </mat-card>
+
+                </div>
+
+                <!-- BOTÃO NOVO ENDEREÇO -->
+                <div class="input-space">
+                    <button mat-stroked-button color="primary" type="button" (click)="openNewAddressForm()">
+                        + Add New Address
+                    </button>
+                </div>
+
+                <!-- shipping Address -->
+                <div *ngIf="!useSavedAddress || showNewAddressForm" formGroupName="shippingAddress" class="form-area">
+                    <h3>Shipping Address</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Country</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="country" [compareWith]="compareCountries"
+                                        (selectionChange)="getStates('shippingAddress')">
+                                        <mat-option *ngFor="let country of countries" [value]="country">
+                                            {{ country.name }}
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error
+                                        *ngIf="shippingCountry?.invalid && (shippingCountry?.dirty || shippingCountry?.touched)">
+                                        Country is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Street</label>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Street</mat-label>
+                                    <input matInput formControlName="street" type="text">
+
+                                    <mat-error
+                                        *ngIf="shippingStreet?.invalid && (shippingStreet?.dirty || shippingStreet?.touched)">
+
+                                        <span *ngIf="shippingStreet?.hasError('required')">
+                                            Street is required
+                                        </span>
+
+                                        <span *ngIf="shippingStreet?.hasError('minlength')">
+                                            Street must be at least 2 characters long
+                                        </span>
+
+                                        <span *ngIf="shippingStreet?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>City</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>City</mat-label>
+
+                                    <input matInput formControlName="city" type="text">
+
+                                    <mat-error
+                                        *ngIf="shippingCity?.invalid && (shippingCity?.dirty || shippingCity?.touched)">
+
+                                        <span *ngIf="shippingCity?.hasError('required')">
+                                            City is required
+                                        </span>
+
+                                        <span *ngIf="shippingCity?.hasError('minlength')">
+                                            City must be at least 2 characters long
+                                        </span>
+
+                                        <span *ngIf="shippingCity?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>State</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="state">
+                                        <mat-option *ngFor="let state of shippingAddressStates" [value]="state">
+                                            {{ state.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="shippingState?.invalid && (shippingState?.dirty || shippingState?.touched)">
+                                        State is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Zip Code</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Zip Code</mat-label>
+                                    <input matInput formControlName="zipCode" type="text">
+
+
+                                    <mat-error
+                                        *ngIf="shippingZipCode?.invalid && (shippingZipCode?.dirty || shippingZipCode?.touched)">
+
+                                        <span *ngIf="shippingZipCode?.hasError('required')">
+                                            Zip Code is required
+                                        </span>
+
+                                        <span *ngIf="shippingZipCode?.hasError('minlength')">
+                                            Zip Code must be at least 5 characters long
+                                        </span>
+
+                                        <span *ngIf="shippingZipCode?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Add check box to copy shipping to billing -->
+                <div class="input-space">
+                    <label class="au-checkbox">
+                        <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)">
+                        <span class="au-checkmark"></span>Billing Address same as Shipping Address
+                    </label>
+                </div>
+
+
+                <!-- Billing Address -->
+                <div formGroupName="billingAddress" class="form-area">
+                    <h3>Billing Address</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Country</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="country" [compareWith]="compareCountries"
+                                        (selectionChange)="getStates('billingAddress')">
+
+
+                                        <mat-option *ngFor="let country of countries" [value]="country">
+                                            {{ country.name }}
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error
+                                        *ngIf="billingCountry?.invalid && (billingCountry?.dirty || billingCountry?.touched)">
+                                        Country is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Street</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Street</mat-label>
+
+                                    <input matInput formControlName="street" type="text">
+
+                                    <mat-error
+                                        *ngIf="billingStreet?.invalid && (billingStreet?.dirty || billingStreet?.touched)">
+
+                                        <span *ngIf="billingStreet?.hasError('required')">
+                                            Street is required
+                                        </span>
+
+                                        <span *ngIf="billingStreet?.hasError('minlength')">
+                                            Street must be at least 2 characters long
+                                        </span>
+
+                                        <span *ngIf="billingStreet?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>City</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>City</mat-label>
+
+                                    <input matInput formControlName="city" type="text">
+
+                                    <mat-error
+                                        *ngIf="billingCity?.invalid && (billingCity?.dirty || billingCity?.touched)">
+
+                                        <span *ngIf="billingCity?.hasError('required')">
+                                            City is required
+                                        </span>
+
+                                        <span *ngIf="billingCity?.hasError('minlength')">
+                                            City must be at least 2 characters long
+                                        </span>
+
+                                        <span *ngIf="billingCity?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>State</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="state">
+                                        <mat-option *ngFor="let state of billingAddressStates" [value]="state">
+                                            {{ state.name }}
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error
+                                        *ngIf="billingState?.invalid && (billingState?.dirty || billingState?.touched)">
+                                        State is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Zip Code</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Zip Code</mat-label>
+                                    <input matInput formControlName="zipCode" type="text">
+
+
+                                    <mat-error
+                                        *ngIf="billingZipCode?.invalid && (billingZipCode?.dirty || billingZipCode?.touched)">
+
+                                        <span *ngIf="billingZipCode?.hasError('required')">
+                                            Zip Code is required
+                                        </span>
+
+                                        <span *ngIf="billingZipCode?.hasError('minlength')">
+                                            Zip Code must be at least 5 characters long
+                                        </span>
+
+                                        <span *ngIf="billingZipCode?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Credit Card -->
+                <div formGroupName="creditCard" class="form-area">
+                    <h3>Credit Card</h3>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Card Type</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="cardType">
+                                        <mat-option value="visa">
+                                            visa
+                                        </mat-option>
+
+                                        <mat-option value="mastercard">
+                                            mastercard
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error
+                                        *ngIf="creditCardCardType?.invalid && (creditCardCardType?.dirty || creditCardCardType?.touched)">
+                                        card type is required
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Name on Card</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Name on Card</mat-label>
+
+                                    <input matInput formControlName="nameOnCard" type="text">
+
+                                    <mat-error
+                                        *ngIf="creditCardNameOnCard?.invalid && (creditCardNameOnCard?.dirty || creditCardNameOnCard?.touched)">
+
+                                        <span *ngIf="creditCardNameOnCard?.hasError('required')">
+                                            name on card is required
+                                        </span>
+
+                                        <span *ngIf="creditCardNameOnCard?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Card Number</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Card Number</mat-label>
+
+                                    <input matInput formControlName="cardNumber" type="text">
+
+                                    <mat-error
+                                        *ngIf="creditCardCardNumber?.invalid && (creditCardCardNumber?.dirty || creditCardCardNumber?.touched)">
+
+                                        <span *ngIf="creditCardCardNumber?.hasError('required')">
+                                            card number is required
+                                        </span>
+
+                                        <span *ngIf="creditCardCardNumber?.hasError('pattern')">
+                                            card number must be 16 digits
+                                        </span>
+
+                                        <span *ngIf="creditCardCardNumber?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Security Code</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+
+                                    <mat-label>Security Code</mat-label>
+
+                                    <input matInput formControlName="securityCode" type="text">
+
+
+
+
+                                    <mat-error
+                                        *ngIf="creditCardSecurityCode?.invalid && (creditCardSecurityCode?.dirty || creditCardSecurityCode?.touched)">
+
+                                        <span *ngIf="creditCardSecurityCode?.hasError('required')">
+                                            security code is required
+                                        </span>
+
+                                        <span *ngIf="creditCardSecurityCode?.hasError('pattern')">
+                                            security code must be at least 3 or 4 characters long
+                                        </span>
+
+                                        <span *ngIf="creditCardSecurityCode?.hasError('notOnlyWhitespace')">
+                                            Cannot be only whitespace
+                                        </span>
+
+                                    </mat-error>
+
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Expiration Month</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="expirationMonth"
+                                        (selectionChange)="handleMonthsAndYears()">
+
+                                        <mat-option *ngFor="let month of creditCardMonths" [value]="month">
+                                            {{ month }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="creditCardExpirationMonth?.invalid && (creditCardExpirationMonth?.dirty || creditCardExpirationMonth?.touched)">
+                                        expiration month is required
+                                    </mat-error>
+
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Expiration Year</label></div>
+                        <div class="col-md-9">
+                            <div class="input-space">
+                                <mat-form-field appearance="outline">
+                                    <mat-select formControlName="expirationYear"
+                                        (selectionChange)="handleMonthsAndYears()">
+
+                                        <mat-option *ngFor="let year of creditCardYears" [value]="year">
+
+                                            {{ year }}
+                                        </mat-option>
+                                    </mat-select>
+
+                                    <mat-error
+                                        *ngIf="creditCardExpirationYear?.invalid && (creditCardExpirationYear?.dirty || creditCardExpirationYear?.touched)">
+                                        expiration year is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order details -->
+                <div class="form-area">
+                    <h3>Review Your Order</h3>
+
+                    <p>Total Quantity: {{ totalQuantity }}</p>
+                    <p>Shipping: FREE</p>
+                    <p>Total Price: {{ totalPrice | currency: 'USD' }}</p>
+                </div>
+
+                <!--submit button-->
+                <div class="text-center" style="text-decoration: none; ">
+                    <button type="submit" class="btn btn-outline-info">Purchase</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

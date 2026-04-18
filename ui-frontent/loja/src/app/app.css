@@ -1,0 +1,509 @@
+/* Add to your main app.css file */
+
+/* User Menu Links in Sidebar */
+.user-menu-links {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.user-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #4a5568;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+}
+
+.user-link:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.user-link .material-icons {
+  font-size: 20px;
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.user-menu-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.user-menu-button .material-icons {
+  font-size: 28px;
+  color: #4a5568;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .user-menu-links {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .user-menu-button .material-icons {
+    font-size: 24px;
+  }
+}
+
+
+
+
+.user-menu-with-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-email {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logged-user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.logged-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.logged-user-info small {
+  color: #777;
+  line-height: 1.2;
+}
+
+.logged-user-info strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-email{
+  background: white;
+  color: #1976d2;
+}
+
+.user-email-badge {
+  background: #1976d2;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.user-email-badge .material-icons {
+  font-size: 18px;
+  color: #1976d2;
+}
+
+.email-text {
+  white-space: nowrap;
+}
+
+.user-email-badge:hover {
+  transform: translateY(-1px);
+  transition: 0.2s;
+}
+
+
+
+.logged-user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.logged-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.logged-user-info small {
+  color: #777;
+  line-height: 1.2;
+}
+
+.logged-user-info strong {
+  color: #222;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.menu-sidebar {
+  z-index: 1000;
+}
+
+.page-container,
+.main-content,
+.section-content,
+.container-fluid {
+  z-index: 1;
+  position: relative;
+}
+
+
+/* contador favorites*/
+.favorite-count-badge {
+  margin-left: auto;
+  background: #e53935;
+  color: white;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.snackbar-success {
+  background: #2e7d32 !important;
+  color: white;
+}
+
+.snackbar-error {
+  background: #e53935 !important;
+  color: white;
+}
+
+
+.notification-badge-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notification-count-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #e53935;
+  color: #fff;
+  border-radius: 999px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* CSS do dropdown de notificações */
+.notification-menu-dropdown {
+  position: relative;
+}
+
+.notification-count-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e53935;
+  color: #fff;
+  border-radius: 999px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.notification-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  min-width: 320px;
+}
+
+.mark-all-btn {
+  border: none;
+  background: transparent;
+  color: #1976d2;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mark-all-btn:hover {
+  text-decoration: underline;
+}
+
+.notification-empty {
+  padding: 18px 16px;
+  color: #718096;
+  font-size: 14px;
+}
+
+.notification-item {
+  white-space: normal !important;
+  align-items: flex-start !important;
+  min-width: 320px;
+}
+
+.notification-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.notification-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.notification-title {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.notification-message {
+  font-size: 13px;
+  color: #718096;
+  line-height: 1.35;
+}
+
+.notification-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e53935;
+  display: inline-block;
+}
+
+.notification-read .notification-title {
+  font-weight: 500;
+  color: #667085;
+}
+
+.notification-read .notification-message {
+  color: #98a2b3;
+}
+
+
+.notification-count-badge,
+.favorite-count-badge {
+  animation: badge-pop 0.35s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notification-count-badge:hover,
+.favorite-count-badge:hover {
+  transform: scale(1.08);
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+
+
+.snackbar-success {
+  background: #2e7d32 !important;
+  color: #fff !important;
+}
+
+.snackbar-error {
+  background: #d32f2f !important;
+  color: #fff !important;
+}
+
+.snackbar-info {
+  background: #1565c0 !important;
+  color: #fff !important;
+}
+
+
+/* Badge animado */
+.notification-count-badge,
+.favorite-count-badge {
+  animation: badge-pop 0.35s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notification-count-badge:hover,
+.favorite-count-badge:hover {
+  transform: scale(1.08);
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  60% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* MOBILE CATEGORIES */
+.mobile-categories {
+  padding: 10px 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.mobile-categories-inner {
+  background: #ffffff;
+}
+
+.mobile-categories-title {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+/* Ajusta o menu de categorias no mobile */
+.mobile-categories .navbar-sidebar {
+  width: 100%;
+}
+
+.mobile-categories .navbar-list,
+.mobile-categories ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.mobile-categories .navbar-list li,
+.mobile-categories ul li {
+  list-style: none;
+  margin: 0;
+}
+
+.mobile-categories .navbar-list li a,
+.mobile-categories ul li a {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Esconde o menu mobile em telas grandes */
+@media (min-width: 992px) {
+  .mobile-categories {
+    display: none !important;
+  }
+}
+
+
+/* BOTÃO */
+.mobile-categories-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 12px;
+  border: none;
+  background: #212529;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+/* DROPDOWN */
+.mobile-categories-dropdown {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+/* LISTA */
+.mobile-categories-dropdown ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* LINKS */
+.mobile-categories-dropdown li a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: 1px solid #dee2e6;
+}
