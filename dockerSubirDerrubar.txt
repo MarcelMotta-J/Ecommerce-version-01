@@ -1,0 +1,8 @@
+subir
+docker compose -f compose.fullstack.yaml up -d --build
+
+
+derrubar
+
+docker compose -f compose.fullstack.yaml down
+

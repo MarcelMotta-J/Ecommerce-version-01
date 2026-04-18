@@ -1,0 +1,7 @@
+Spring Data REST Configuration
+
+ O arquivo MyDataRestConfig desabilita os
+ métodos para o Endpoint:
+ - POST, PUT e DELETE
+
+Só o método GET fica disponível

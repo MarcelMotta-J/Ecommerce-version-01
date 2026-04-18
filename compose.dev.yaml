@@ -1,0 +1,61 @@
+services:
+  mysql:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: storedb
+      MYSQL_USER: storeuser
+      MYSQL_PASSWORD: storepass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+
+  backend:
+    image: eclipse-temurin:17-jdk
+    working_dir: /app
+    volumes:
+      - ./api/store1:/app
+      - /app/target
+    command: ./mvnw spring-boot:run
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/storedb
+      SPRING_DATASOURCE_USERNAME: storeuser
+      SPRING_DATASOURCE_PASSWORD: storepass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: dev_secret_dev_secret_dev_secret_1234
+      JAVA_HOME: /opt/java/openjdk
+    restart: unless-stopped
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./ui-frontent/loja:/app
+      - /app/node_modules
+    command: sh -c "npm install && npx ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json"
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
