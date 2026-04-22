@@ -22,40 +22,40 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  
+
   loadNotifications(): void {
-  this.getNotifications().subscribe({
-    next: data => {
-      this.notificationsSubject.next(data);
-      this.emitUnreadCount(data);
-    },
-    error: err => {
-      console.error('Error loading notifications', err);
-    }
-  });
-}
+    this.getNotifications().subscribe({
+      next: data => {
+        this.notificationsSubject.next(data);
+        this.emitUnreadCount(data);
+      },
+      error: err => {
+        console.error('Error loading notifications', err);
+      }
+    });
+  }
 
   loadLatestNotifications(): void {
-  this.getLatestNotifications().subscribe({
-    next: data => {
-      this.notificationsSubject.next(data);
-      this.emitUnreadCount(data);
-    },
-    error: err => {
-      console.error('Error loading latest notifications', err);
-    }
-  });
-}
+    this.getLatestNotifications().subscribe({
+      next: data => {
+        this.notificationsSubject.next(data);
+        this.emitUnreadCount(data);
+      },
+      error: err => {
+        console.error('Error loading latest notifications', err);
+      }
+    });
+  }
 
   // list last 10 notifications
   getLatestNotifications(): Observable<NotificationItem[]> {
-    return this.http.get<NotificationItem[]>('/api/user/notifications/latest');
+    return this.http.get<NotificationItem[]>(`${this.baseUrl}/latest`);
   }
 
   // list all notifications
   getNotifications(): Observable<NotificationItem[]> {
-  return this.http.get<NotificationItem[]>('/api/user/notifications');
-}
+    return this.http.get<NotificationItem[]>(this.baseUrl);
+  }
 
   markAsRead(notificationId: number): void {
     this.http.patch<void>(`${this.baseUrl}/${notificationId}/read`, {}).subscribe({
@@ -92,20 +92,20 @@ export class NotificationService {
     });
   }
 
- 
+
   addNotification(notification: NotificationItem): void {
-  const current = this.notificationsSubject.value;
+    const current = this.notificationsSubject.value;
 
-  const alreadyExists = current.some(item => item.id === notification.id);
+    const alreadyExists = current.some(item => item.id === notification.id);
 
-  if (alreadyExists) {
-    return;
+    if (alreadyExists) {
+      return;
+    }
+
+    const updated = [notification, ...current].slice(0, 10);
+    this.notificationsSubject.next(updated);
+    this.emitUnreadCount(updated);
   }
-
-  const updated = [notification, ...current].slice(0, 10);
-  this.notificationsSubject.next(updated);
-  this.emitUnreadCount(updated);
-}
 
   clearNotifications(): void {
     this.notificationsSubject.next([]);
