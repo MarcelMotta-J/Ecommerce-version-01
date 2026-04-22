@@ -1,10 +1,6 @@
-const IS_LOCALHOST =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1';
+const API_HOST = 'https://ecommerce-version-01.onrender.com';
 
-export const API_BASE = IS_LOCALHOST
-  ? 'https://ecommerce-version-01.onrender.com/api'
-  : '/api';
+export const API_BASE = `${API_HOST}/api`;
 
 export const API_ENDPOINTS = {
   PRODUCTS: `${API_BASE}/products`,
@@ -30,11 +26,7 @@ export const API_ENDPOINTS = {
   CHECKOUT: `${API_BASE}/checkout`,
   CHECKOUT_PURCHASE: `${API_BASE}/checkout/purchase`,
 
-  WS_NOTIFICATIONS: IS_LOCALHOST
-    ? 'wss://ecommerce-version-01.onrender.com/ws-notifications'
-    : '/ws-notifications'
+   WS_NOTIFICATIONS: 'wss://ecommerce-version-01.onrender.com/ws-notifications'
 };
 
-export const WS_URL = IS_LOCALHOST
-  ? API_ENDPOINTS.WS_NOTIFICATIONS
-  : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}${API_ENDPOINTS.WS_NOTIFICATIONS}`;
+export const WS_URL = API_ENDPOINTS.WS_NOTIFICATIONS;
