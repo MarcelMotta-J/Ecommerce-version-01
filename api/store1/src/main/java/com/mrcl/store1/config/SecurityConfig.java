@@ -80,7 +80,8 @@ public class SecurityConfig {
                 "http://localhost:4200",
                 "https://localhost:4200",
                 "http://192.168.*.*",
-                "http://localhost:*"
+                "http://localhost:*",
+                "https://*.onrender.com"// frontend render
         ));
 
         configuration.setAllowedMethods(List.of(
