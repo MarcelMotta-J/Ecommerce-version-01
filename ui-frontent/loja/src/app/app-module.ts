@@ -71,6 +71,7 @@ const appRoutes: Routes = [
 
 
   { path: 'login', component: UserLogin },
+  { path: 'register', component: RegisterComponent },
 
 
   { path: 'admin/login', component: AdminLogin },
