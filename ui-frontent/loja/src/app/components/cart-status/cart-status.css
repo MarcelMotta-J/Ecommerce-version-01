@@ -42,12 +42,10 @@
     width: 100%;
   }
 
-  .header-actions {
-    width: 100%;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: nowrap;
-  }
+.header-actions {
+  width: 100%;
+  justify-content: center
+}
 
   .cart-area .total {
     font-size: 14px;
