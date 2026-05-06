@@ -22,6 +22,9 @@ import { AdminOrderDetails } from './components/admin/admin-order-details/admin-
 import { AdminDashboard } from './components/admin/admin-dashboard/admin-dashboard';
 import { AdminLogin } from './components/admin/admin-login/admin-login';
 import { AdminActivity } from './components/admin/admin-activity/admin-activity';
+import { AdminReviews } from './components/admin/admin-reviews/admin-reviews';
+
+
 
 
 import { UserLogin } from './components/user/user-login/user-login';
@@ -57,7 +60,6 @@ import { FavoriteComponent } from './components/user/favorite.component/favorite
 import { ProductCardComponent as ProductCard } from './components/shared/product-card/product-card';
 import { NotificationsComponent } from './components/user/notifications/notifications.component';
 
-
 // <-- Move routes into a constant
 const appRoutes: Routes = [
 
@@ -83,7 +85,9 @@ const appRoutes: Routes = [
   { path: 'admin/activity', component: AdminActivity, canActivate: [adminAuthGuard] },
   { path: 'admin/customers', component: AdminCustomers, canActivate: [adminAuthGuard] },
   { path: 'admin/customers/edit/:id', component: AdminCustomerEdit, canActivate: [adminAuthGuard] },
-
+  { path: 'admin/reviews', component: AdminReviews, canActivate: [adminAuthGuard]  },
+  
+  
   { path: 'profile', component: UserProfile, canActivate: [authGuard] },
   { path: 'orders', component: UserOrders, canActivate: [authGuard] },
   { path: 'orders/:id', component: UserOrderDetail, canActivate: [authGuard] },
@@ -121,7 +125,8 @@ const appRoutes: Routes = [
     RegisterComponent,
     FavoriteComponent,
     ProductCard,
-    NotificationsComponent
+    NotificationsComponent,
+    AdminReviews
 
 
   ],

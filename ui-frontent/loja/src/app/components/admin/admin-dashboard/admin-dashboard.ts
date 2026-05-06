@@ -10,6 +10,7 @@ import { AdminRevenuePerDayPoint } from '../../../common/admin/admin-revenue-per
 import { AdminTopProductPoint } from '../../../common/admin/admin-top-product-point';
 import { AdminProductStockPoint } from '../../../common/admin/admin-product-stock-point';
 import { jsPDF } from 'jspdf';
+import { AdminReviewService } from '../../../services/admin/admin-review.service';
 
 
 Chart.register(...registerables);
@@ -38,10 +39,17 @@ export class AdminDashboard implements OnInit, AfterViewChecked {
 
   chartVisible = true;
 
+  averageRating: number = 0;
+  totalReviews: number = 0;
+
+  reviewDistribution: any[] = [];
+
   @ViewChild('dashboardCanvas')
   dashboardCanvas?: ElementRef<HTMLCanvasElement>;
 
-  constructor(private adminDashboardService: AdminDashboardService) { }
+  constructor(
+    private adminDashboardService: AdminDashboardService,
+    private reviewService: AdminReviewService) { }
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -49,6 +57,9 @@ export class AdminDashboard implements OnInit, AfterViewChecked {
     this.loadRevenuePerDay();
     this.loadTopProducts();
     this.loadProductsByStock();
+    this.loadStats();
+    this.loadReviewDistribution();
+
   }
 
 
@@ -305,5 +316,18 @@ export class AdminDashboard implements OnInit, AfterViewChecked {
     pdf.addImage(imageData, 'PNG', 10, 25, 260, 120);
     pdf.save(`${this.getChartTitle().toLowerCase().replace(/\s+/g, '-')}.pdf`);
   }
+
+  loadStats() {
+    this.reviewService.getStats().subscribe(data => {
+      this.averageRating = data.averageRating;
+      this.totalReviews = data.totalReviews;
+    });
+  }
+
+  loadReviewDistribution() {
+  this.reviewService.getDistribution().subscribe(data => {
+    this.reviewDistribution = data;
+  });
+}
 
 }

@@ -86,7 +86,9 @@
   </div>
 
   <!-- ADMIN SIDEBAR -->
-  <aside class="admin-sidebar" *ngIf="isAdminRoute">
+  <aside
+  class="admin-sidebar"
+  *ngIf="isAdminRoute && authService.isAdmin() && !isAdminLoginRoute">
     <div class="admin-logo">
       <a routerLink="/admin/dashboard">Admin Panel</a>
     </div>
@@ -116,6 +118,8 @@
         <span class="material-icons">groups</span>
         Customers
       </a>
+
+      <a routerLink="/admin/reviews">⭐ Reviews</a>
 
       <a routerLink="/products">
         <span class="material-icons">store</span>

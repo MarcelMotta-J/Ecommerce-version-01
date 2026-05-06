@@ -72,27 +72,7 @@ export class AuthService {
     return this.getRoles().includes('ROLE_ADMIN');
   }
 
-  /*
-  private getTokenPayload(): JwtPayload | null {
-    const token = this.getToken();
-
-    if (!token) {
-      return null;
-    }
-
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(atob(parts[1]));
-    } catch {
-      return null;
-    }
-  }
-    */
-
+  
 
   private getTokenPayload(): JwtPayload | null {
     const token = this.getToken();
@@ -118,5 +98,7 @@ export class AuthService {
     const padded = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, '=');
     return atob(padded);
   }
+
+
 
 }

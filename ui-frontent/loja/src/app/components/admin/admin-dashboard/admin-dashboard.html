@@ -42,6 +42,64 @@
         <p class="stat-value">{{ dashboard.totalCustomers }}</p>
       </div>
 
+      <div class="stat-card reviews-average">
+        <div class="stat-header">
+          <span class="material-icons">star</span>
+          <h4>Reviews Average</h4>
+        </div>
+
+
+
+        <div class="stars">
+          <span *ngFor="let star of [1,2,3,4,5]">
+            <i class="fa" [ngClass]="{
+         'fa-star': star <= averageRating,
+         'fa-star-half-o': star > averageRating && star - 1 < averageRating,
+         'fa-star-o': star > averageRating
+                                      }">
+            </i>
+          </span>
+        </div>
+
+
+        <p class="stat-value">{{ averageRating | number:'1.1-2' }}</p>
+
+
+      </div>
+
+      <div class="stat-card reviews-total">
+        <div class="stat-header">
+          <span class="material-icons">rate_review</span>
+          <h4>Total Reviews</h4>
+        </div>
+        <p class="stat-value">{{ totalReviews }}</p>
+      </div>
+
+
+      <div class="review-distribution-card">
+
+        <h3>⭐ Review Distribution</h3>
+
+        <div *ngFor="let item of reviewDistribution" class="review-bar">
+
+          <span class="rating-label">
+            {{ item.rating }} ⭐
+          </span>
+
+          <div class="bar-container">
+            <div class="bar-fill" [style.width.%]="item.total * 20">
+            </div>
+          </div>
+
+          <span class="rating-total">
+            {{ item.total }}
+          </span>
+
+        </div>
+
+      </div>
+
+
       <div class="chart-actions">
         <button class="chart-btn orders-btn" [ngClass]="{ 'active-chart-btn': selectedChart === 'orders' }"
           (click)="showOrdersChart()">

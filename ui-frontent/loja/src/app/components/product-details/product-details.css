@@ -1,0 +1,153 @@
+.reviews-section {
+  margin-top: 30px;
+}
+
+.review-card {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.stars {
+  color: #ffc107;
+}
+
+.comment {
+  margin: 5px 0;
+}
+
+.user {
+  color: #888;
+  font-size: 12px;
+}
+
+.average-rating {
+  margin: 12px 0;
+  color: #ffc107;
+  font-size: 18px;
+}
+
+.rating-text {
+  color: #555;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.review-form {
+  margin: 25px 0;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.review-form label {
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.reviews-section {
+  margin-top: 30px;
+}
+
+.review-card {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+}
+
+.stars {
+  color: #ffc107;
+}
+
+.comment {
+  margin: 5px 0;
+}
+
+.user {
+  color: #888;
+  font-size: 12px;
+}
+
+
+.clickable-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 12px;
+}
+
+.star-btn {
+  cursor: pointer;
+  color: #ffc107;
+  font-size: 24px;
+  transition: transform 0.15s ease;
+}
+
+.star-btn:hover {
+  transform: scale(1.18);
+}
+
+.selected-rating {
+  margin-left: 8px;
+  color: #555;
+  font-size: 14px;
+}
+
+.rating-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 12px;
+}
+
+.rating-star {
+  cursor: pointer;
+  font-size: 24px;
+  color: #ffc107;
+  transition: transform 0.15s ease;
+}
+
+.rating-star:hover {
+  transform: scale(1.15);
+}
+
+.rating-selected {
+  margin-left: 8px;
+  color: #555;
+  font-size: 14px;
+}
+
+.review-card {
+  border-bottom: 1px solid #ddd;
+  padding: 16px 0;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.stars {
+  color: #ffc107;
+}
+
+.comment {
+  margin: 10px 0 0 54px;
+}
+
+.user {
+  color: #888;
+  font-size: 12px;
+}

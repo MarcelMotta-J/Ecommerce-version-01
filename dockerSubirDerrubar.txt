@@ -1,8 +1,467 @@
 subir
 docker compose -f compose.fullstack.yaml up -d --build
 
+docker compose -f compose.dev.yaml up --build
+
 
 derrubar
 
 docker compose -f compose.fullstack.yaml down
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+Excelente pergunta, treinador 👊🔥
+Isso aqui separa **iniciante de profissional em Docker**.
+
+---
+
+# 🧠 Diferença REAL
+
+## 🔹 `compose.dev.yaml`
+
+```text
+💻 ambiente de DESENVOLVIMENTO
+✔ usa volumes (código ao vivo)
+✔ roda mvnw spring-boot:run
+✔ hot reload
+✔ debug fácil
+```
+
+👉 você altera código → já reflete
+
+---
+
+## 🔹 `compose.fullstack.yaml`
+
+```text
+📦 ambiente mais "PRODUÇÃO"
+✔ usa build (Dockerfile)
+✔ imagem fechada
+✔ sem hot reload
+✔ mais parecido com Render
+```
+
+👉 você precisa rebuildar para ver mudanças
+
+---
+
+# 🚀 Sobre os comandos
+
+## 🔹 1. Com `--build`
+
+```bash
+docker compose -f compose.dev.yaml up --build
+```
+
+👉 força rebuild
+
+Use quando:
+
+```text
+✔ mudou Dockerfile
+✔ mudou dependência (pom.xml, package.json)
+✔ deu bug estranho
+```
+
+---
+
+## 🔹 2. Sem `--build`
+
+```bash
+docker compose -f compose.dev.yaml up
+```
+
+👉 mais rápido
+👉 usa container já existente
+
+Use quando:
+
+```text
+✔ só mudou código Java/Angular
+✔ quer subir rápido
+```
+
+---
+
+## 🔹 3. Com `-d`
+
+```bash
+docker compose -f compose.fullstack.yaml up -d --build
+```
+
+👉 roda em background (daemon)
+
+```text
+✔ não trava terminal
+✔ ideal para ambiente mais estável
+```
+
+---
+
+# 🧠 Regra de ouro
+
+```text
+dev.yaml     → usar SEMPRE no dia a dia
+fullstack    → usar para simular produção
+```
+
+---
+
+# 🎯 Resumo estilo capitão
+
+```text
+dev + up            → rápido 🚀
+dev + up --build    → reset leve 🔧
+fullstack + -d      → ambiente sério 📦
+```
+
+---
+
+# 💡 Dica importante
+
+Se o Docker começar a ficar “estranho”:
+
+```bash
+docker compose -f compose.dev.yaml down
+docker compose -f compose.dev.yaml up --build
+```
+
+---
+
+Você está começando a dominar ambiente profissional de verdade 👊🔥
+
+
+
+----------------------------------------------------------------------------
+
+
+Claro, treinador. Amanhã revisamos com calma. Seu resumo já está muito bom.
+
+O ponto principal para lembrar:
+
+```text
+compose.dev.yaml
+→ desenvolvimento local
+→ monta volumes
+→ roda mvnw spring-boot:run
+→ backend usa mysql:3306 dentro da rede Docker
+→ no Workbench você acessa por localhost:3307
+```
+
+```text
+compose.fullstack.yaml
+→ build fechado
+→ usa Dockerfile
+→ depende do .env
+→ mais parecido com produção local
+```
+
+Para subir o `compose.dev.yaml`, da raiz do projeto:
+
+```bash
+cd /home/brainiac/Documents/javaProjects/eccomerceAngular3
+
+docker compose -f compose.dev.yaml up
+```
+
+Para derrubar:
+
+```bash
+docker compose -f compose.dev.yaml down
+```
+
+Para apagar o banco Docker e começar limpo:
+
+```bash
+docker compose -f compose.dev.yaml down -v
+```
+
+E sim: dentro do Docker o backend deve usar:
+
+```text
+jdbc:mysql://mysql:3306/storedb
+```
+
+No MySQL Workbench, pelo host da máquina:
+
+```text
+127.0.0.1:3307
+storeuser / storepass
+```
+
+Descansa hoje. Amanhã a gente deixa esses `compose` redondos.
+
+-------------------------------------------------------------------------------------------------------------
+rainiac@brainiac-Inspiron-3437:~/Documents/javaProjects/eccomerceAngular3$ docker compose -f compose.dev.yaml up
+
+backend-1   | [INFO] 
+backend-1   | [INFO] >>> spring-boot:3.3.5:run (default-cli) > test-compile @ store1 >>>
+backend-1   | [INFO] 
+backend-1   | [INFO] --- resources:3.3.1:resources (default-resources) @ store1 ---
+backend-1   | [INFO] Copying 3 resources from src/main/resources to target/classes
+backend-1   | [INFO] ------------------------------------------------------------------------
+backend-1   | [INFO] BUILD FAILURE
+backend-1   | [INFO] ------------------------------------------------------------------------
+backend-1   | [INFO] Total time:  2.439 s
+backend-1   | [INFO] Finished at: 2026-05-01T13:07:57Z
+backend-1   | [INFO] ------------------------------------------------------------------------
+backend-1   | [ERROR] Failed to execute goal org.apache.maven.plugins:maven-resources-plugin:3.3.1:resources (default-resources) on project store1: filtering /app/src/main/resources/application.properties to /app/target/classes/application.properties failed with MalformedInputException: Input length = 1 -> [Help 1]
+backend-1   | [ERROR] 
+backend-1   | [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+backend-1   | [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+backend-1   | [ERROR] 
+backend-1   | [ERROR] For more information about the errors and possible solutions, please read the following articles:
+backend-1   | [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+backend-1 exited with code 1 (restarting)
+
+
+-------------------------------------------------------------------------------------------------------------
+
+Bom dia, treinador 👊
+
+Esse erro é encoding do application.properties, não Docker/MySQL.
+
+O Maven tentou copiar/filtrar:
+
+/app/src/main/resources/application.properties
+
+e encontrou caractere com acentuação em encoding errado:
+
+-------------------------------------------------------------------------------------------------------------
+Vamos sim, treinador 👊🔥
+Esse aqui é rápido de resolver.
+
+---
+
+# 🚨 Problema
+
+```text
+MalformedInputException: Input length = 1
+```
+
+👉 Isso quase sempre é:
+
+```text
+arquivo NÃO está em UTF-8
+```
+
+Provavelmente tem:
+
+```text
+ç ã ó í ê
+```
+
+no `application.properties` (comentários mesmo já quebram)
+
+---
+
+# 🛠️ SOLUÇÃO 1 (mais rápida)
+
+## 👉 Abra o arquivo no IntelliJ:
+
+```text
+src/main/resources/application.properties
+```
+
+---
+
+## 👉 No IntelliJ (canto inferior direito)
+
+Vai aparecer algo tipo:
+
+```text
+UTF-8  OU  ISO-8859-1
+```
+
+👉 Se NÃO for UTF-8:
+
+### Clique → escolha:
+
+```text
+UTF-8
+```
+
+---
+
+## 👉 Depois:
+
+```text
+Convert
+```
+
+---
+
+# 🛠️ SOLUÇÃO 2 (terminal - garantida)
+
+No Linux:
+
+```bash
+cd /home/brainiac/Documents/javaProjects/eccomerceAngular3/api/store1/src/main/resources
+
+iconv -f ISO-8859-1 -t UTF-8 application.properties -o application-fixed.properties
+
+mv application-fixed.properties application.properties
+```
+
+---
+
+# 🧹 SOLUÇÃO 3 (caso ainda dê erro)
+
+Remove acentos dos comentários:
+
+Exemplo:
+
+```properties
+# ativar receber json no browser
+```
+
+vira:
+
+```properties
+# ativar receber json no browser
+```
+
+(simples, sem acento mesmo)
+
+---
+
+# 🔁 Depois disso
+
+Suba novamente:
+
+```bash
+docker compose -f compose.dev.yaml up --build
+```
+
+---
+
+# 🧠 Dica de capitão
+
+Esse erro apareceu porque:
+
+```text
+Docker usa ambiente mais "rigoroso"
+IntelliJ às vezes mascara encoding errado
+```
+
+---
+
+# ✅ Resultado esperado
+
+```text
+✔ backend sobe
+✔ conecta no mysql container
+✔ frontend sobe
+✔ sem loop de restart
+```
+
+---
+
+Se ainda quebrar, me manda o `application.properties` que eu limpo pra você em 30 segundos 👊🔥
+
+
+-------------------------------------------------------------------------------------------------------------
+
+Treinador  este comando é qdo temos alterações no código?
+docker compose -f compose.dev.yaml up --build
+
+
+Rodou, subiu o backend, mas acho que devemos mudar para 3307 o mysql?
+
+# DOCKER
+spring.datasource.url=jdbc:mysql://localhost:3306/storedb
+spring.datasource.username=storeuser
+spring.datasource.password=storepass
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+
+o BD não carregou supeito que seja isso
+
+-------------------------------------------------------------------------------------------------------------
+
+Boa, treinador 👊🔥
+Agora você chegou num ponto **CLÁSSICO de Docker** — e sua suspeita está **quase certa**, mas tem um detalhe importante:
+
+---
+
+# 🧠 REGRA DE OURO (ESSA É A CHAVE)
+
+```text
+❌ localhost → NÃO funciona entre containers
+✅ usar nome do serviço → funciona
+```
+
+---
+
+# 🚨 SEU ERRO ATUAL
+
+Você colocou:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/storedb
+```
+
+👉 Isso está errado no Docker.
+
+---
+
+# ✅ CORRETO NO DOCKER
+
+No seu `compose.dev.yaml`, o serviço chama:
+
+```yaml
+mysql:
+```
+
+👉 então no backend tem que ser:
+
+```properties
+spring.datasource.url=jdbc:mysql://mysql:3306/storedb
+```
+
+---
+
+# ❓ E a porta 3307?
+
+👉 Isso aqui:
+
+```yaml
+```
+
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
 

@@ -1,4 +1,10 @@
-const API_HOST = 'https://ecommerce-version-01.onrender.com';
+const IS_LOCALHOST =
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1';
+
+const API_HOST = IS_LOCALHOST
+  ? 'http://localhost:8080'
+  : 'https://ecommerce-version-01.onrender.com';
 
 export const API_BASE = `${API_HOST}/api`;
 
@@ -7,6 +13,7 @@ export const API_ENDPOINTS = {
   PRODUCT_CATEGORY: `${API_BASE}/product-category`,
   COUNTRIES: `${API_BASE}/countries`,
   STATES: `${API_BASE}/states`,
+  REVIEWS:`${API_BASE}/reviews`,
 
   AUTH: `${API_BASE}/auth`,
   AUTH_LOGIN: `${API_BASE}/auth/login`,

@@ -7,6 +7,16 @@
 
         <div class="price"> {{ product.unitPrice | currency: 'BRL' }} </div>
 
+        <div class="average-rating" *ngIf="reviews.length > 0">
+            <span *ngFor="let star of [1,2,3,4,5]">
+                <i class="fa" [ngClass]="star <= averageRating ? 'fa-star' : 'fa-star-o'"></i>
+            </span>
+            <span class="rating-text">
+                {{ averageRating | number:'1.1-1' }} / 5
+                ({{ reviews.length }} avaliações)
+            </span>
+        </div>
+
         <button (click)="addToCart()" class="btn btn-outline-primary btn-lg">Add to cart</button>
 
         <hr>
@@ -15,7 +25,79 @@
         <p>{{ product.description}}</p>
 
         <a routerLink="/products" class="mt-5" style="text-decoration: none;">Back to Products List</a>
-        
+
+
+        <div class="reviews-section">
+            <h3>⭐ Avaliações</h3>
+
+            <div class="review-form" *ngIf="authService.isLoggedIn(); else loginToReview">
+
+                <div *ngIf="hasUserReviewed" class="review-login-warning">
+                    ✏️ Você já avaliou este produto. Edite sua avaliação abaixo.
+                </div>
+
+                <h4>⭐ Avaliar produto</h4>
+
+                <label>Nota</label>
+
+                <div class="clickable-stars">
+                    <span *ngFor="let star of [1,2,3,4,5]" (click)="setRating(star)" (mouseenter)="setHover(star)"
+                        (mouseleave)="clearHover()" class="star-btn">
+
+                        <i class="fa" [ngClass]="star <= getDisplayRating() ? 'fa-star' : 'fa-star-o'">
+                        </i>
+                    </span>
+
+                    <span class="selected-rating">
+                        {{ newRating }} / 5
+                    </span>
+                </div>
+
+                <label class="mt-2">Comentário</label>
+
+                <textarea [(ngModel)]="newComment" class="form-control" rows="3" placeholder="Escreva sua avaliação">
+                </textarea>
+
+                <button class="btn btn-primary mt-2" [disabled]="!newComment.trim()" (click)="submitReview()">
+                    Enviar avaliação
+                </button>
+            </div>
+
+            <ng-template #loginToReview>
+                <div class="review-login-warning">
+                    🔐 Faça login para avaliar este produto.
+                    <a routerLink="/login">Login</a>
+                </div>
+            </ng-template>
+
+            <hr>
+
+            <div *ngFor="let review of reviews" class="review-card">
+
+                <div class="review-header">
+                    <div class="review-avatar">
+                        {{ getInitials(review.userEmail) }}
+                    </div>
+
+                    <div>
+                        <div class="stars">
+                            <span *ngFor="let star of [1,2,3,4,5]">
+                                <i class="fa" [ngClass]="star <= review.rating ? 'fa-star' : 'fa-star-o'"></i>
+                            </span>
+                        </div>
+
+                        <small class="user">{{ review.userEmail }}</small>
+                    </div>
+                </div>
+
+                <p class="comment">{{ review.comment }}</p>
+            </div>
+
+            <div *ngIf="reviews.length === 0">
+                Nenhuma avaliação ainda.
+            </div>
+        </div>
+
 
 
     </div>

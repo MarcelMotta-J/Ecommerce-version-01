@@ -155,4 +155,8 @@ export class App implements OnInit, OnDestroy {
     this.showMobileCategories = !this.showMobileCategories;
   }
 
+  get isAdminLoginRoute(): boolean {
+    return this.router.url === '/admin/login';
+  }
+
 }
