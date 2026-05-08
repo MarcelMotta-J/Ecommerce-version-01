@@ -98,7 +98,7 @@ export class Checkout implements OnInit {
 
     this.setupShippingBillingSync();
 
-    this.loadUserData();
+    
 
     // populate credit card months
     const startMonth: number = new Date().getMonth() + 1;
@@ -125,8 +125,9 @@ export class Checkout implements OnInit {
         console.log('retrieved countries : ' + JSON.stringify(data));
         this.countries = data;
 
-        // Load saved user data only after countries are available
-        //this.loadUserDataIntoCheckout();
+         // carregar perfil SOMENTE após countries
+        this.loadUserData();
+
       }
     );
 

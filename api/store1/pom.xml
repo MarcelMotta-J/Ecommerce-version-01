@@ -187,6 +187,13 @@
 			<artifactId>postgresql</artifactId>
 		</dependency>
 
+		<!-- Mercado Pago SDK -->
+		<dependency>
+			<groupId>com.mercadopago</groupId>
+			<artifactId>sdk-java</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
 	</dependencies>
 
 

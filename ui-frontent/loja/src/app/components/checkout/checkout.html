@@ -116,16 +116,13 @@
 
                 <div class="input-space">
                     <label class="au-checkbox checkbox-fix">
-                        <input
-                        type="checkbox"
-                        [(ngModel)]="useSavedAddress"
-                        [ngModelOptions]="{ standalone: true }"
-                        (change)="onToggleSavedAddress()">
+                        <input type="checkbox" [(ngModel)]="useSavedAddress" [ngModelOptions]="{ standalone: true }"
+                            (change)="onToggleSavedAddress()">
 
                         <span class="au-checkmark"></span>
 
                         <span class="checkbox-text">
-                        Use my saved address
+                            Use my saved address
                         </span>
                     </label>
                 </div>
@@ -447,6 +444,29 @@
                                 </mat-form-field>
                             </div>
                         </div>
+                    </div>
+
+                </div>
+
+                <div class="credit-card-preview">
+
+                    <div class="card-chip"></div>
+
+                    <div class="card-number">
+                        {{ checkoutFormGroup.get('creditCard.cardNumber')?.value || '#### #### #### ####' }}
+                    </div>
+
+                    <div class="card-holder">
+                        {{ checkoutFormGroup.get('creditCard.nameOnCard')?.value || 'YOUR NAME' }}
+                    </div>
+
+                    <div class="card-expiration">
+                        {{
+                        checkoutFormGroup.get('creditCard.expirationMonth')?.value || 'MM'
+                        }}/
+                        {{
+                        checkoutFormGroup.get('creditCard.expirationYear')?.value || 'YY'
+                        }}
                     </div>
 
                 </div>

@@ -11,6 +11,8 @@ import com.mrcl.store1.entity.Address;
 import com.mrcl.store1.entity.Order;
 import com.mrcl.store1.entity.Product;
 
+
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 
@@ -50,7 +52,7 @@ public class UserProfileService {
     }
 
     //Ativar cache
-    @Cacheable(value = "userAddresses", key = "#email")
+    @Cacheable(value = "userProfile", key = "#email")
     @Transactional(readOnly = true)
     public UserProfileResponse getUserProfile(String email) {
         AppUser user = userRepository.findByEmail(email)
@@ -60,7 +62,7 @@ public class UserProfileService {
 
 
     // Invalidar cache
-    @CacheEvict(value = "userAddresses", key = "#email")
+    @CacheEvict(value = "userProfile", key = "#email")
     @Transactional
     public UserProfileResponse updateProfile(String email, UserProfileRequest request) {
         AppUser user = userRepository.findByEmail(email)
@@ -257,6 +259,7 @@ public class UserProfileService {
                 user.getPhoneNumber(),
                 user.isEnabled(),
                 user.getCreatedAt(),
+
                 user.getRoles()
         );
     }

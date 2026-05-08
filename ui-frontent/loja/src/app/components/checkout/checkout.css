@@ -135,3 +135,10 @@
 }
 
 
+.credit-card-preview {
+    width: 420px;
+    height: 240px;
+    border-radius: 20px;
+    padding: 30px;
+
+}
