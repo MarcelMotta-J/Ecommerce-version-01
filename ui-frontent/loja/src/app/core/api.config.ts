@@ -30,6 +30,8 @@ export const API_ENDPOINTS = {
   ADMIN_DASHBOARD: `${API_BASE}/admin/dashboard`,
   ADMIN_ACTIVITY: `${API_BASE}/admin/activity`,
 
+  PAYMENTS: `${API_BASE}/payments`,
+
   CHECKOUT: `${API_BASE}/checkout`,
   CHECKOUT_PURCHASE: `${API_BASE}/checkout/purchase`,
 

@@ -44,6 +44,8 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       JWT_SECRET: dev_secret_dev_secret_dev_secret_1234
       JAVA_HOME: /opt/java/openjdk
+      MERCADO_PAGO_ACCESS_TOKEN: ${MERCADO_PAGO_ACCESS_TOKEN}
+      APP_FRONTEND_URL: ${APP_FRONTEND_URL}
     restart: unless-stopped
 
   frontend:

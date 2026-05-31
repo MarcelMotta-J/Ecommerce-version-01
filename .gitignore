@@ -24,3 +24,9 @@ api/files/
 api/store1/arquivos/
 ui-frontent/loja.zip
 ui-frontent/loja/frontsrc.zip
+
+#
+.env
+*.env
+application-local.properties
+

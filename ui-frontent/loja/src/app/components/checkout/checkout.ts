@@ -13,6 +13,8 @@ import { Purchase } from '../../common/purchase';
 import { UserService } from '../../services/user/user.service';
 import { UserAddressResponse } from '../../common/user/user-address-response';
 
+import { PaymentService } from '../../services/payment.service';
+
 @Component({
   selector: 'app-checkout',
   standalone: false,
@@ -46,7 +48,7 @@ export class Checkout implements OnInit {
 
   showNewAddressForm = false;
 
-
+  isPaymentLoading = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,6 +56,7 @@ export class Checkout implements OnInit {
     private lojaFormService: LojaFormService,
     private checkoutService: CheckoutService,
     private userService: UserService,
+    private paymentService: PaymentService,
     private router: Router
   ) { }
 
@@ -98,7 +101,7 @@ export class Checkout implements OnInit {
 
     this.setupShippingBillingSync();
 
-    
+
 
     // populate credit card months
     const startMonth: number = new Date().getMonth() + 1;
@@ -125,7 +128,7 @@ export class Checkout implements OnInit {
         console.log('retrieved countries : ' + JSON.stringify(data));
         this.countries = data;
 
-         // carregar perfil SOMENTE após countries
+        // carregar perfil SOMENTE após countries
         this.loadUserData();
 
       }
@@ -432,7 +435,7 @@ export class Checkout implements OnInit {
         const matchedState = data.find(s => s.name === selectedState?.name);
 
         if (matchedState) {
-           this.checkoutFormGroup.get('billingAddress.state')?.setValue(matchedState, { emitEvent: false });
+          this.checkoutFormGroup.get('billingAddress.state')?.setValue(matchedState, { emitEvent: false });
         }
 
         // 🔥 bloqueia edição
@@ -691,6 +694,34 @@ export class Checkout implements OnInit {
     });
   }
 
+  pay(): void {
+    this.isPaymentLoading = true;
+
+    this.paymentService.createPreference().subscribe({
+      next: (response) => {
+        console.log('Mercado Pago preference:', response);
+
+        if (response?.sandboxInitPoint) {
+          window.location.href = response.sandboxInitPoint;
+          return;
+        }
+
+        this.isPaymentLoading = false;
+        alert('Mercado Pago não retornou link de pagamento.');
+      },
+      error: (err) => {
+        this.isPaymentLoading = false;
+
+        console.error('Payment error FULL', err);
+        console.error('Backend message:', err.error);
+
+        alert(
+          'Erro ao iniciar pagamento.\n' +
+          (err?.error?.message || err.message || 'Erro desconhecido')
+        );
+      }
+    });
+  }
 
 
   // customer
@@ -772,4 +803,6 @@ export class Checkout implements OnInit {
   get creditCardExpirationYear() {
     return this.checkoutFormGroup.get('creditCard.expirationYear');
   }
+
+
 }

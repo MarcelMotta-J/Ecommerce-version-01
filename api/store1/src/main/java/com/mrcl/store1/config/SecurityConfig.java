@@ -53,6 +53,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/reviews/**").authenticated()
 
+                .requestMatchers(HttpMethod.POST, "/api/payments/webhook").permitAll()
+
+                .requestMatchers(HttpMethod.POST, "/api/payments/**").authenticated()
+
+
                 .requestMatchers(HttpMethod.GET,
                         "/api/products",
                         "/api/products/**",

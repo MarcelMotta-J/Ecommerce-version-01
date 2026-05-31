@@ -652,6 +652,18 @@
                     <p>Total Price: {{ totalPrice | currency: 'USD' }}</p>
                 </div>
 
+                <button type="button" class="btn btn-primary mt-3" (click)="pay()" [disabled]="isPaymentLoading">
+
+                    <span *ngIf="!isPaymentLoading">
+                        Pay with Mercado Pago
+                    </span>
+
+                    <span *ngIf="isPaymentLoading">
+                        Redirecionando para Mercado Pago...
+                    </span>
+
+                </button>
+
                 <!--submit button-->
                 <div class="text-center" style="text-decoration: none; ">
                     <button type="submit" class="btn btn-outline-info">Purchase</button>
