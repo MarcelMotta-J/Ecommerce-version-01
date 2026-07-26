@@ -11,15 +11,16 @@ export class PaymentService {
 
   private paymentUrl = API_ENDPOINTS.PAYMENTS;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  createPreference(): Observable<any> {
 
+
+  createPreference(orderId: number): Observable<any> {
     return this.http.post<any>(
       `${this.paymentUrl}/create-preference`,
-      {}
+      { orderId }
     );
   }
 
-  
+
 }

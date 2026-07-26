@@ -652,7 +652,11 @@
                     <p>Total Price: {{ totalPrice | currency: 'USD' }}</p>
                 </div>
 
-                <button type="button" class="btn btn-primary mt-3" (click)="pay()" [disabled]="isPaymentLoading">
+               <button
+                    type="button"
+                    class="btn btn-primary mt-3"
+                    (click)="pay()"
+                    [disabled]="isPaymentLoading">
 
                     <span *ngIf="!isPaymentLoading">
                         Pay with Mercado Pago
@@ -661,7 +665,6 @@
                     <span *ngIf="isPaymentLoading">
                         Redirecionando para Mercado Pago...
                     </span>
-
                 </button>
 
                 <!--submit button-->

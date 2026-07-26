@@ -67,6 +67,11 @@ public class Order {
     @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
+    @Column(name = "mercado_pago_preference_id")
+    private String mercadoPagoPreferenceId;
+
+    @Column(name = "mercado_pago_payment_id")
+    private String mercadoPagoPaymentId;
 
 
     public void add(OrderItem item) {
