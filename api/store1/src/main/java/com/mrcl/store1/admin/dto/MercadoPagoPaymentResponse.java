@@ -1,0 +1,18 @@
+package com.mrcl.store1.admin.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record MercadoPagoPaymentResponse(
+        Long id,
+        String status,
+
+        @JsonProperty("status_detail")
+        String statusDetail,
+
+        @JsonProperty("external_reference")
+        String externalReference
+) {
+}
