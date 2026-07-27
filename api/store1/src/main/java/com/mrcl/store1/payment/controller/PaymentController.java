@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import com.mrcl.store1.admin.service.MercadoPagoPaymentClient;
-import com.mrcl.store1.admin.dto.MercadoPagoPaymentResponse;
+import com.mrcl.store1.payment.service.MercadoPagoPaymentClient;
+import com.mrcl.store1.payment.dto.MercadoPagoPaymentResponse;
 
 @RestController
 @RequestMapping("/api/payments")

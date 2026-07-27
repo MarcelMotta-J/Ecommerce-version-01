@@ -1,4 +1,4 @@
-package com.mrcl.store1.admin.dto;
+package com.mrcl.store1.payment.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

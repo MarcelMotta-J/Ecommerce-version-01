@@ -1,15 +1,32 @@
 #!/bin/bash
 
+# primeiro executar source ~/api.sh
+
 API="http://localhost:8080"
 
-login_admin () {
-TOKEN=$(curl -s -X POST $API/api/auth/login \
--H "Content-Type: application/json" \
--d '{"email":"admin@test.com","password":"123456"}' \
-| sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
+# função comum para validar o token
+require_token() {
+  if [ -z "$TOKEN" ]; then
+    echo "TOKEN is empty. Run login_admin first."
+    return 1
+  fi
+}
 
-export TOKEN
-echo "Admin token loaded"
+login_admin() {
+  TOKEN=$(
+    curl -sS -X POST "$API/api/auth/login" \
+      -H "Content-Type: application/json" \
+      -d '{"email":"admin@test.com","password":"123456"}' |
+      jq -r '.token'
+  )
+
+  if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+    echo "Admin login failed"
+    return 1
+  fi
+
+  export TOKEN
+  echo "Admin token loaded"
 }
 
 login_user () {
@@ -27,9 +44,12 @@ curl -s $API/api/admin/users \
 -H "Authorization: Bearer $TOKEN" | jq
 }
 
-admin_orders () {
-curl -s $API/api/admin/orders \
--H "Authorization: Bearer $TOKEN" | jq
+admin_orders() {
+  require_token || return 1
+
+  curl -sS "$API/api/admin/orders" \
+    -H "Authorization: Bearer $TOKEN" |
+    jq
 }
 
 admin_order () {
@@ -138,11 +158,7 @@ curl -s "$API/api/admin/orders?status=$1&customerEmail=$2&page=${3:-0}&size=${4:
   -H "Authorization: Bearer $TOKEN" | jq
 }
 
-# show one admin order detail
-admin_order () {
-  curl -s "$API/api/admin/orders/$1" \
-    -H "Authorization: Bearer $TOKEN" | jq
-}
+
 
 # admin dashboard backend with totalOrders, totalOrders, pendingOrders, totalProducts
 admin_dashboard () {

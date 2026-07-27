@@ -1,6 +1,6 @@
-package com.mrcl.store1.admin.service;
+package com.mrcl.store1.payment.service;
 
-import com.mrcl.store1.admin.dto.MercadoPagoPaymentResponse;
+import com.mrcl.store1.payment.dto.MercadoPagoPaymentResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
