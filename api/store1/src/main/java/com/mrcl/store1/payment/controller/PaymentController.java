@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.mrcl.store1.payment.service.MercadoPagoPaymentClient;
 import com.mrcl.store1.payment.dto.MercadoPagoPaymentResponse;
+
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -68,6 +71,14 @@ public class PaymentController {
         // that has already been paid.
         if (order.getStatus() == OrderStatus.PAID) {
             throw new IllegalStateException("Order is already paid");
+        }
+
+        // Prevent creating multiple Mercado Pago
+        // preferences for the same order.
+        if (order.getMercadoPagoPreferenceId() != null) {
+            throw new IllegalStateException(
+                    "Order already has a Mercado Pago preference"
+            );
         }
 
         // The item amount is always obtained from the database.
@@ -135,7 +146,7 @@ public class PaymentController {
             @RequestBody(required = false)
             Map<String, Object> payload,
 
-            // Formato legado:
+            // Legacy format
             // ?id=123&topic=payment
             @RequestParam(
                     name = "id",
@@ -149,7 +160,7 @@ public class PaymentController {
             )
             String legacyTopic,
 
-            // Formato atual:
+            // Current format
             // ?data.id=123&type=payment
             @RequestParam(
                     name = "data.id",
@@ -183,11 +194,11 @@ public class PaymentController {
             /*
              * MERCHANT ORDER
              *
-             * Formato legado:
+             * Legacy format:
              * ?id=123&topic=merchant_order
              *
-             * Também mantemos a inspeção do payload para
-             * compatibilidade com notificações antigas.
+             * We also inspect the payload to keep
+             * compatibility with older notifications.
              */
             if (isMerchantOrderNotification(
                     notificationType,
@@ -208,6 +219,7 @@ public class PaymentController {
                     return ResponseEntity.ok().build();
                 }
 
+                // Merchant Order does not contain payments yet.
                 processMerchantOrder(
                         Long.parseLong(merchantOrderId)
                 );
@@ -218,10 +230,10 @@ public class PaymentController {
             /*
              * PAYMENT
              *
-             * Formato atual:
+             * Current format:
              * ?data.id=123&type=payment
              *
-             * Formato legado:
+             * Legacy format:
              * ?id=123&topic=payment
              */
             if (isPaymentNotification(
@@ -251,9 +263,10 @@ public class PaymentController {
             }
 
             /*
-             * Um webhook pode receber outros eventos no futuro,
-             * como chargebacks. Não devemos tratar qualquer ID
-             * desconhecido automaticamente como pagamento.
+             * Webhooks may contain other event types
+             * in the future (such as chargebacks).
+             * Unknown resources must not be treated
+             * as payment notifications.
              */
             System.out.println(
                     "Unsupported notification type: "
@@ -279,9 +292,9 @@ public class PaymentController {
             exception.printStackTrace();
 
             /*
-             * Um erro 5xx informa que houve uma falha interna.
-             * O Mercado Pago poderá realizar uma nova tentativa
-             * de entrega da notificação.
+             * Returning HTTP 5xx indicates an internal error.
+             * Mercado Pago may retry delivering
+             * this notification.
              */
             return ResponseEntity.internalServerError().build();
         }
@@ -379,6 +392,8 @@ public class PaymentController {
         return null;
     }
 
+
+
     private void processMerchantOrder(
             Long merchantOrderId
     ) throws Exception {
@@ -398,10 +413,12 @@ public class PaymentController {
                         + merchantOrder.getExternalReference()
         );
 
+        // Merchant Order does not contain payments yet.
         List<MerchantOrderPayment> payments =
                 merchantOrder.getPayments();
 
-        // A Merchant Order may be created before a payment exists.
+        // A Merchant Order may be created before
+        // any payment is associated with it.
         if (payments == null || payments.isEmpty()) {
             System.out.println(
                     "Merchant Order does not contain payments yet"
@@ -409,38 +426,56 @@ public class PaymentController {
             return;
         }
 
-        // Prefer an approved payment. Otherwise, process the latest
-        // payment so rejected and pending states are also persisted.
-        MerchantOrderPayment selectedPayment = payments.stream()
-                .filter(payment ->
-                        "approved".equalsIgnoreCase(
-                                payment.getStatus()
-                        )
-                )
-                .findFirst()
-                .orElse(payments.get(payments.size() - 1));
+        for (MerchantOrderPayment payment : payments) {
 
-        Long paymentId = selectedPayment.getId();
+            if (payment == null || payment.getId() == null) {
+                System.out.println(
+                        "Merchant Order contains a payment without ID"
+                );
+                continue;
+            }
 
-        System.out.println(
-                "Payment found in Merchant Order: " + paymentId
-        );
-        System.out.println(
-                "Payment summary status: "
-                        + selectedPayment.getStatus()
-        );
-        System.out.println(
-                "Payment status detail: "
-                        + selectedPayment.getStatusDetails()
-        );
+            System.out.println(
+                    "Payment found in Merchant Order: "
+                            + payment.getId()
+            );
 
-        processPayment(paymentId);
+            System.out.println(
+                    "Payment summary status: "
+                            + payment.getStatus()
+            );
+
+            processPayment(payment.getId());
+        }
     }
+
 
     private void processPayment(Long paymentId) throws Exception {
 
-        MercadoPagoPaymentResponse payment =
-                mercadoPagoPaymentClient.getPayment(paymentId);
+        if (paymentId == null) {
+            System.out.println(
+                    "Payment notification does not contain a payment ID"
+            );
+            return;
+        }
+
+        final MercadoPagoPaymentResponse payment;
+
+        try {
+            payment = mercadoPagoPaymentClient.getPayment(paymentId);
+        } catch (HttpClientErrorException.NotFound exception) {
+
+            // The payment resource may not be available yet.
+            // Wait for a future webhook notification.
+            System.out.println(
+                    "Mercado Pago payment "
+                            + paymentId
+                            + " is not available yet. "
+                            + "Waiting for another webhook."
+            );
+
+            return;
+        }
 
         String externalReference = payment.externalReference();
 
@@ -485,12 +520,19 @@ public class PaymentController {
             return;
         }
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Order not found: " + orderId
-                        )
-                );
+        Optional<Order> optionalOrder =
+                orderRepository.findById(orderId);
+
+        if (optionalOrder.isEmpty()) {
+
+            System.out.println(
+                    "Order not found: " + orderId
+            );
+
+            return;
+        }
+
+        Order order = optionalOrder.get();
 
         if (paymentStatus == null
                 || paymentStatus.isBlank()) {
@@ -561,17 +603,17 @@ public class PaymentController {
         return switch (paymentStatus) {
 
             /*
-             * O pagamento foi confirmado.
+             * Payment successfully approved.
              */
             case "approved" ->
                     OrderStatus.PAID;
 
             /*
-             * O pagamento ainda está sendo processado.
+             * The payment is still being processed.
              *
-             * Nunca fazemos um pedido já pago regredir
-             * para PENDING por causa de uma notificação
-             * atrasada ou repetida.
+             * Never downgrade an already paid order
+             * back to PENDING because of delayed or
+             * duplicated webhook notifications.
              */
             case "pending",
                  "in_process",
@@ -587,10 +629,11 @@ public class PaymentController {
             }
 
             /*
-             * O pagamento não foi concluído.
+             * The payment was not completed.
              *
-             * Também protegemos um pedido já pago contra
-             * uma notificação antiga de outra tentativa.
+             * Also protect already paid orders from
+             * outdated notifications belonging to
+             * previous payment attempts.
              */
             case "rejected",
                  "cancelled",
@@ -606,9 +649,8 @@ public class PaymentController {
             }
 
             /*
-             * Não alteramos o pedido para um estado
-             * desconhecido. Apenas preservamos o estado
-             * que já está salvo.
+             * Unknown Mercado Pago status.
+             * Preserve the current order state.
              */
             default -> {
                 System.out.println(
