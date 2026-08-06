@@ -60,6 +60,10 @@ import { FavoriteComponent } from './components/user/favorite.component/favorite
 import { ProductCardComponent as ProductCard } from './components/shared/product-card/product-card';
 import { NotificationsComponent } from './components/user/notifications/notifications.component';
 
+import { PaymentSuccessComponent } from './components/payment-success-component/payment-success-component';
+import { PaymentFailureComponent } from './components/payment-failure-component/payment-failure-component';
+import { PaymentPendingComponent } from './components/payment-pending-component/payment-pending-component';
+
 // <-- Move routes into a constant
 const appRoutes: Routes = [
 
@@ -85,9 +89,9 @@ const appRoutes: Routes = [
   { path: 'admin/activity', component: AdminActivity, canActivate: [adminAuthGuard] },
   { path: 'admin/customers', component: AdminCustomers, canActivate: [adminAuthGuard] },
   { path: 'admin/customers/edit/:id', component: AdminCustomerEdit, canActivate: [adminAuthGuard] },
-  { path: 'admin/reviews', component: AdminReviews, canActivate: [adminAuthGuard]  },
-  
-  
+  { path: 'admin/reviews', component: AdminReviews, canActivate: [adminAuthGuard] },
+
+
   { path: 'profile', component: UserProfile, canActivate: [authGuard] },
   { path: 'orders', component: UserOrders, canActivate: [authGuard] },
   { path: 'orders/:id', component: UserOrderDetail, canActivate: [authGuard] },
@@ -95,6 +99,9 @@ const appRoutes: Routes = [
   { path: 'checkout', component: Checkout, canActivate: [authGuard] },
   { path: 'notifications', component: NotificationsComponent, canActivate: [authGuard] },
 
+  { path: 'payment/success', component: PaymentSuccessComponent },
+  { path: 'payment/failure', component: PaymentFailureComponent },
+  { path: 'payment/pending', component: PaymentPendingComponent },
 
   { path: '', redirectTo: '/products', pathMatch: 'full' },
   { path: '**', redirectTo: '/products', pathMatch: 'full' }
@@ -126,8 +133,10 @@ const appRoutes: Routes = [
     FavoriteComponent,
     ProductCard,
     NotificationsComponent,
-    AdminReviews
-
+    AdminReviews,
+    PaymentSuccessComponent,
+    PaymentFailureComponent,
+    PaymentPendingComponent
 
   ],
   imports: [

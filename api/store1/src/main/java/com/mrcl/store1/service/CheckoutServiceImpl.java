@@ -118,7 +118,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
 
 
-        return new PurchaseResponse(orderTrackingNumber);
+        return new PurchaseResponse(orderTrackingNumber, order.getId());
     }
 
 

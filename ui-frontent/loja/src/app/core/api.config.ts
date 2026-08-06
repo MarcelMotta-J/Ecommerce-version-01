@@ -1,12 +1,27 @@
-const IS_LOCALHOST =
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1';
+const HOSTNAME = window.location.hostname;
 
-const API_HOST = IS_LOCALHOST
+const IS_LOOPBACK =
+  HOSTNAME === 'localhost' ||
+  HOSTNAME === '127.0.0.1';
+
+const IS_PRIVATE_NETWORK =
+  HOSTNAME.startsWith('192.168.') ||
+  HOSTNAME.startsWith('10.') ||
+  /^172\.(1[6-9]|2\d|3[0-1])\./.test(HOSTNAME);
+
+const API_HOST = IS_LOOPBACK
   ? 'http://localhost:8080'
-  : 'https://ecommerce-version-01.onrender.com';
+  : IS_PRIVATE_NETWORK
+    ? `http://${HOSTNAME}:8080`
+    : 'https://ecommerce-version-01.onrender.com';
 
 export const API_BASE = `${API_HOST}/api`;
+
+export const WS_URL = IS_LOOPBACK
+  ? 'ws://localhost:8080/ws-notifications'
+  : IS_PRIVATE_NETWORK
+    ? `ws://${HOSTNAME}:8080/ws-notifications`
+    : 'wss://ecommerce-version-01.onrender.com/ws-notifications';
 
 export const API_ENDPOINTS = {
   PRODUCTS: `${API_BASE}/products`,
@@ -30,10 +45,12 @@ export const API_ENDPOINTS = {
   ADMIN_DASHBOARD: `${API_BASE}/admin/dashboard`,
   ADMIN_ACTIVITY: `${API_BASE}/admin/activity`,
 
+  PAYMENTS: `${API_BASE}/payments`,
+
   CHECKOUT: `${API_BASE}/checkout`,
   CHECKOUT_PURCHASE: `${API_BASE}/checkout/purchase`,
 
-   WS_NOTIFICATIONS: 'wss://ecommerce-version-01.onrender.com/ws-notifications'
+    WS_NOTIFICATIONS: WS_URL
 };
 
-export const WS_URL = API_ENDPOINTS.WS_NOTIFICATIONS;
+

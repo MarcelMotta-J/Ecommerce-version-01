@@ -7,9 +7,6 @@ data/
 # frontend
 node_modules/
 
-# env
-.env
-
 # IDE
 .idea/
 .vscode/
@@ -24,3 +21,9 @@ api/files/
 api/store1/arquivos/
 ui-frontent/loja.zip
 ui-frontent/loja/frontsrc.zip
+
+# environment variables
+.env
+*.env
+application-local.properties
+

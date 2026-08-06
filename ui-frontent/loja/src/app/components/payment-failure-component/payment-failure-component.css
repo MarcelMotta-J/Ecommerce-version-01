@@ -1,0 +1,32 @@
+.payment-result-page {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.payment-result-card {
+  max-width: 560px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 36px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.payment-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.payment-result-card h2 {
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.payment-result-card p {
+  color: #666;
+  margin-bottom: 24px;
+}
