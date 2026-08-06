@@ -86,10 +86,12 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of(
-                "http://localhost:4200",
-                "https://localhost:4200",
-                "http://192.168.*.*",
                 "http://localhost:*",
+                "https://localhost:*",
+                "http://127.0.0.1:*",
+                "https://127.0.0.1:*",
+                "http://192.168.*.*:*",
+                "https://192.168.*.*:*",
                 "https://*.onrender.com"// frontend render
         ));
 
